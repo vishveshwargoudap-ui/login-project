@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    background:
+        radial-gradient(circle at 14% 18%, rgba(37, 99, 235, 0.22), transparent 34%),
+        radial-gradient(circle at 84% 80%, rgba(16, 185, 129, 0.18), transparent 32%),
+        linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+    min-height: 100vh;
+    color: #0f172a;
+}
+
+.payment-page {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 36px 20px 48px;
+}
+
+.payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.sub-title {
+    margin: 0 0 6px;
+    color: #334155;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.back-link {
+    text-decoration: none;
+    background: #2563eb;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.payment-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+}
+
+.payment-card,
+.summary-card {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(148, 163, 184, 0.26);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 14px 26px rgba(15, 23, 42, 0.1);
+}
+
+.method-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background: #f8fbff;
+}
+
+.method-card h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.method-card p {
+    margin: 4px 0 0;
+    color: #475569;
+    font-size: 0.92rem;
+}
+
+.method-details {
+    margin: 8px 0 14px;
+    border-left: 3px solid #60a5fa;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.method-details label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.method-details input {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px;
+    outline: none;
+}
+
+.hint {
+    margin: 0 0 10px;
+    color: #334155;
+}
+
+.hidden {
+    display: none;
+}
+
+.confirm-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 11px;
+    color: #fff;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.summary-card h3 {
+    margin-top: 0;
+}
+
+.summary-card p {
+    margin: 0 0 10px;
+}
+
+.note {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 860px) {
+    .payment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

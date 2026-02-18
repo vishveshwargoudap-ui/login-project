@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Puttaraj Bakery</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+  <main class="landing-page">
+    <header class="topbar">
+      <div class="brand">
+        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Puttaraj Bakery Logo">
+        <span>Puttaraj Bakery</span>
+      </div>
+      <div class="top-actions">
+        <a href="{{ url_for('auth.login') }}" class="btn-link">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="btn-link">Register</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <p class="kicker">Freshly Baked Daily</p>
+        <h1>Welcome to Puttaraj Bakery</h1>
+        <p class="subtitle">
+          Browse delicious products, add your favorites, and enjoy a smooth shopping experience.
+        </p>
+        <div class="hero-actions">
+          <a href="{{ url_for('auth.register') }}" class="btn-primary">Get Started</a>
+          <a href="{{ url_for('auth.login') }}" class="btn-secondary">I Already Have an Account</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h2>Why Choose Us?</h2>
+        <ul>
+          <li>Fresh quality products</li>
+          <li>Seller and customer friendly dashboard</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

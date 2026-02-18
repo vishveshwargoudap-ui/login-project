@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Register</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+
+  <main class="auth-page">
+    <section class="auth-card">
+      <p class="auth-kicker">Puttaraj Bakery</p>
+      <h1>Create Account</h1>
+      <p class="auth-subtitle">Register to start exploring products.</p>
+
+      <form action="/register" method="POST" class="auth-form">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Enter name" name="name" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label for="pwd">Password</label>
+          <input type="password" id="pwd" placeholder="Enter password" name="password" required>
+        </div>
+
+        <div class="auth-actions">
+          <button type="submit" class="btn-primary">Register</button>
+          <a href="{{ url_for('auth.login') }}" class="btn-secondary">Back to login</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+</body>
+</html>

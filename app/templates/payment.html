@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
+</head>
+<body>
+    <main class="payment-page">
+        <header class="payment-header">
+            <div>
+                <p class="sub-title">Checkout for {{ user.name }}</p>
+                <h1>Choose Payment Method</h1>
+            </div>
+            <a class="back-link" href="{{ url_for('auth.cart') }}">Back to Cart</a>
+        </header>
+
+        <section class="payment-grid">
+            <form id="paymentForm" class="payment-card">
+                <div class="method-details">
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" type="text" placeholder="Enter phone number" value="{{ user.phone or '' }}">
+                </div>
+
+                <label class="method-card">
+                    <input type="radio" name="method" value="razorpay" checked>
+                    <div>
+                        <h2>Pay Through Razorpay UPI</h2>
+                        <p>Pay instantly using UPI in Razorpay checkout.</p>
+                    </div>
+                </label>
+
+                <label class="method-card">
+                    <input type="radio" name="method" value="upi">
+                    <div>
+                        <h2>Manual UPI Payment</h2>
+                        <p>Pay to UPI ID and submit transaction ID.</p>
+                    </div>
+                </label>
+
+                <div id="manualUpiDetails" class="method-details hidden">
+                    <p class="hint">UPI ID: <strong>puttarajbakery@upi</strong></p>
+                    <label for="utr">UTR / Transaction ID</label>
+                    <input id="utr" type="text" placeholder="Enter transaction ID after payment">
+                </div>
+
+                <label class="method-card">
+                    <input type="radio" name="method" value="cash">
+                    <div>
+                        <h2>Pay When You Visit Store</h2>
+                        <p>Confirm order now and pay cash at pickup.</p>
+                    </div>
+                </label>
+
+               <button id="pay-btn" type="button" class="confirm-btn">pay now</button>
+            </form>
+
+            <aside class="summary-card">
+                <h3>Order Summary</h3>
+                <p id="itemCount">Items: 0</p>
+                <p id="orderTotal">Total: Rs 0.00</p>
+                <p class="note">After confirmation, your cart will be cleared.</p>
+            </aside>
+        </section>
+    </main>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+        const itemCountEl = document.getElementById("itemCount");
+        const totalEl = document.getElementById("orderTotal");
+        const payBtn = document.getElementById("pay-btn");
+        const phoneInput = document.getElementById("phone");
+        const utrInput = document.getElementById("utr");
+        const manualUpiDetails = document.getElementById("manualUpiDetails");
+        const productId = cartItems.length > 0
+            ? (cartItems[0].product_id || cartItems[0].id || cartItems[0].productId || null)
+            : null;
+
+        const totalQty = cartItems.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
+        const totalPrice = cartItems.reduce((sum, item) => sum + ((Number(item.qty) || 0) * (Number(item.price) || 0)), 0);
+
+        itemCountEl.textContent = `Items: ${totalQty}`;
+        totalEl.textContent = `Total: Rs ${totalPrice.toFixed(2)}`;
+
+        function getSelectedMethod() {
+            return document.querySelector('input[name="method"]:checked')?.value || "razorpay";
+        }
+
+        function updateMethodView() {
+            const method = getSelectedMethod();
+            if (method === "upi") {
+                manualUpiDetails.classList.remove("hidden");
+            } else {
+                manualUpiDetails.classList.add("hidden");
+            }
+        }
+
+        document.querySelectorAll('input[name="method"]').forEach((input) => {
+            input.addEventListener("change", updateMethodView);
+        });
+
+        // Redirect helper used for Razorpay failure or manual popup close.
+        function redirectToPaymentFailed() {
+            window.location.href = "/payment_failed";
+        }
+
+        // Attach checkout flow only to the Pay button click.
+        payBtn.addEventListener("click", async (event) => {
+            // Prevent the form's default submit/navigation behavior.
+            event.preventDefault();
+
+            if (!phoneInput.value.trim()) {
+                alert("Please enter phone number.");
+                phoneInput.focus();
+                return;
+            }
+
+            if (!cartItems.length) {
+                alert("Your cart is empty. Please add products first.");
+                window.location.href = "{{ url_for('auth.cart') }}";
+                return;
+            }
+
+            const method = getSelectedMethod();
+
+            if (method === "upi" && !utrInput.value.trim()) {
+                alert("Please enter UTR / Transaction ID for manual UPI payment.");
+                utrInput.focus();
+                return;
+            }
+
+            if (method === "upi" || method === "cash") {
+                try {
+                    const placeOrderResponse = await fetch("{{ url_for('auth.place_order') }}", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            items: cartItems,
+                            payment_mode: method,
+                            transaction_id: method === "upi" ? utrInput.value.trim() : "",
+                            phone: phoneInput.value.trim()
+                        })
+                    });
+
+                    const placeOrderData = await placeOrderResponse.json();
+                    if (!placeOrderResponse.ok || !placeOrderData.ok || !placeOrderData.redirect_url) {
+                        alert(placeOrderData.message || "Failed to place order.");
+                        return;
+                    }
+
+                    localStorage.removeItem("cartItems");
+                    window.location.href = placeOrderData.redirect_url;
+                } catch (error) {
+                    alert("Unable to place order right now. Please try again.");
+                }
+                return;
+            }
+
+            if (!productId) {
+                alert("Product details are missing. Please try again.");
+                return;
+            }
+
+            try {
+                // Step 1: Ask backend to create a Razorpay order for this product.
+                const orderResponse = await fetch("/create_order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ product_id: productId })
+                });
+
+                const orderData = await orderResponse.json();
+                if (!orderResponse.ok || !orderData.order_id || !orderData.amount || !orderData.key) {
+                    throw new Error("Invalid order response");
+                }
+
+                // Step 2: Open Razorpay checkout in UPI-only mode.
+                const options = {
+                    key: orderData.key,
+                    amount: orderData.amount,
+                    currency: "INR",
+                    order_id: orderData.order_id,
+                    name: "Checkout",
+                    description: "UPI Payment",
+                    prefill: {
+                        contact: phoneInput.value.trim()
+                    },
+                    method: {
+                        upi: true,
+                        card: false,
+                        netbanking: false,
+                        wallet: false,
+                        emi: false,
+                        paylater: false
+                    },
+                    config: {
+                        display: {
+                            blocks: {
+                                upi: {
+                                    name: "Pay using UPI",
+                                    instruments: [{ method: "upi" }]
+                                }
+                            },
+                            sequence: ["block.upi"],
+                            preferences: {
+                                show_default_blocks: false
+                            }
+                        }
+                    },
+                    modal: {
+                        ondismiss: redirectToPaymentFailed
+                    },
+                    // Step 3: On successful payment, send signature payload to backend for verification.
+                    handler: async function (response) {
+                        try {
+                            const verifyResponse = await fetch("/verify_payment", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+
+                            if (!verifyResponse.ok) {
+                                redirectToPaymentFailed();
+                                return;
+                            }
+
+                            window.location.href = "/payment_success";
+                        } catch (error) {
+                            redirectToPaymentFailed();
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+
+                // Step 4: Any Razorpay failure event should redirect to failed page.
+                rzp.on("payment.failed", redirectToPaymentFailed);
+                rzp.open();
+            } catch (error) {
+                redirectToPaymentFailed();
+            }
+        });
+
+        updateMethodView();
+    </script>
+</body>
+</html>

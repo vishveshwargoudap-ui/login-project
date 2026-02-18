@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if is_seller_view %}Payments{% else %}Order Details{% endif %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/order.css') }}">
+</head>
+<body>
+    <main class="order-page">
+        <header class="order-header">
+            <div>
+                <h1>{% if is_seller_view %}All Payments{% else %}Order Confirmed{% endif %}</h1>
+                <p>
+                    {% if is_seller_view %}
+                    Seller payment records
+                    {% else %}
+                    Thank you {{ user.name }}, your order is placed.
+                    {% endif %}
+                </p>
+            </div>
+            <a class="back-link" href="{% if user.role == 'seller' %}{{ url_for('auth.seller_dashboard') }}{% else %}{{ url_for('auth.dashboard') }}{% endif %}">
+                Back to Dashboard
+            </a>
+        </header>
+
+        {% if is_seller_view %}
+            <section class="card">
+                {% if orders %}
+                    <table class="payments-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Phone</th>
+                                <th>Items</th>
+                                <th>Payment Mode</th>
+                                <th>Transaction ID</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.buyer_name }}</td>
+                                    <td>{{ order.buyer_phone }}</td>
+                                    <td>
+                                        {% for item in order.items %}
+                                            {{ item.product_name }} (x{{ item.quantity }}){% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ order.payment_mode }}</td>
+                                    <td>{{ order.transaction_id or '-' }}</td>
+                                    <td>Rs {{ '%.2f'|format(order.total_amount) }}</td>
+                                    <td>
+                                        <form action="{{ url_for('auth.remove_payment', order_id=order.id) }}" method="POST">
+                                            <button type="submit" class="remove-payment-btn">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="empty">No payments yet.</p>
+                {% endif %}
+            </section>
+        {% else %}
+            <section class="card">
+                <p><strong>Phone Number:</strong> {{ order.buyer_phone }}</p>
+                <p><strong>Payment Mode:</strong> {{ order.payment_mode }}</p>
+                <p><strong>Transaction ID:</strong> {{ order.transaction_id or '-' }}</p>
+                <h3>Ordered Items</h3>
+                <ul>
+                    {% for item in order.items %}
+                        <li>{{ item.product_name }} - Qty {{ item.quantity }} - Rs {{ '%.2f'|format(item.price * item.quantity) }}</li>
+                    {% endfor %}
+                </ul>
+                <p class="total"><strong>Total:</strong> Rs {{ '%.2f'|format(order.total_amount) }}</p>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>
+

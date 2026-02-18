@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard1.css') }}">
+</head>
+<body class="{% if user.role == 'seller' %}seller-view{% else %}user-view{% endif %}">
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <header class="site-header">
+        <img src="{{ url_for('static', filename='images/logo.jpg') }}" class="logo">
+        <h1 class="title">puttaraj bakery</h1>
+    </header>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProduct()">
+    </div>
+
+    <div class="nav-actions">
+        {% if user.role != 'seller' %}
+        <button class="profile-btn" onclick="goProfile()">Profile</button>
+        {% endif %}
+        {% if can_add_product %}
+        <button class="profile-btn" onclick="goAddProduct()">Add Product</button>
+        {% endif %}
+        {% if show_payments_button %}
+        <button class="profile-btn" onclick="goPayments()">Payments</button>
+        {% endif %}
+        {% if user.role != 'seller' %}
+        <button class="cart-btn" onclick="goCart()">Cart</button>
+        {% endif %}
+        <button onclick="window.location.href='/logout'" class="logout">logout</button>
+    </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products" id="productList">
+    {% for product in products %}
+    <div class="card product-card">
+        <div class="product-image-wrap">
+            <img
+                src="{{ url_for('static', filename='images/' + product.image) }}"
+                alt="{{ product.name }}"
+                onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/demo.jpg') }}';"
+            >
+        </div>
+        <div class="product-info">
+            <h3>{{ product.name }}</h3>
+            <p class="price">Rs {{ product.price }}</p>
+            <p class="product-description">{{ product.description or 'Fresh bakery item.' }}</p>
+        </div>
+        {% if user.role != 'seller' %}
+        <button
+            type="button"
+            class="add-cart-btn"
+            onclick='addToCart({{ product.id }}, {{ product.name|tojson }}, {{ product.price }}, {{ product.image|tojson }})'
+        >
+            Add to Cart
+        </button>
+        {% endif %}
+        {% if user.role == 'seller' %}
+        <form action="{{ url_for('auth.remove_product', product_id=product.id) }}" method="POST">
+            <button type="submit" class="remove-product-btn">Remove Product</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function openProduct(product) {
+    alert(product + " selected");
+}
+
+function goProfile() {
+    window.location.href = "/profile";
+}
+
+function goAddProduct() {
+    window.location.href = "/add_product";
+}
+
+function goCart() {
+    window.location.href = "/cart";
+}
+
+function goPayments() {
+    window.location.href = "{{ url_for('auth.seller_payments') }}";
+}
+
+function addToCart(id, name, price, image) {
+    const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+    const existing = cartItems.find(item => item.id === id);
+
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cartItems.push({ id, name, price, image, qty: 1 });
+    }
+
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    alert(name + " added to cart");
+}
+
+function searchProduct() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.getElementsByClassName("product-card");
+
+    for (let i = 0; i < cards.length; i++) {
+        let title = cards[i].getElementsByTagName("h3")[0].innerText.toLowerCase();
+        cards[i].style.display = title.includes(input) ? "" : "none";
+    }
+}
+</script>
+
+</body>
+</html>

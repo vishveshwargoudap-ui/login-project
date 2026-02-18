@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <main class="profile-page">
+        <section class="profile-card">
+            <div class="profile-head">
+                <div class="avatar">{{ (user.name[0] if user and user.name else 'U')|upper }}</div>
+                <div class="head-text">
+                    <h1>My Profile</h1>
+                    <p>Manage your account details</p>
+                </div>
+            </div>
+
+            {% if user %}
+            <div class="user-info">
+                <h2>Welcome, {{ user.name }}</h2>
+                <p><span>Email:</span> {{ user.email }}</p>
+            </div>
+            {% endif %}
+
+            <form method="POST" class="profile-form">
+                <div class="field-grid">
+                    <div class="field">
+                        <label>Phone</label>
+                        <input type="text" name="phone" value="{{ user.phone or '' }}" placeholder="Enter phone number">
+                    </div>
+
+                    <div class="field">
+                        <label>village</label>
+                        <input type="text" name="city" value="{{ user.city or '' }}" placeholder="Enter village">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>Address</label>
+                    <textarea name="address" rows="4" placeholder="Enter your address">{{ user.address or '' }}</textarea>
+                </div>
+
+                <div class="field">
+                    <label>Pincode</label>
+                    <input type="text" name="pincode" value="{{ user.pincode or '' }}" placeholder="Enter pincode">
+                </div>
+
+                <div class="action-row">
+                    <a class="back-btn" href="{% if user and user.role == 'seller' %}{{ url_for('auth.seller_dashboard') }}{% else %}{{ url_for('auth.dashboard') }}{% endif %}">Back to Dashboard</a>
+                    <button type="submit">Save Details</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+</body>
+</html>
