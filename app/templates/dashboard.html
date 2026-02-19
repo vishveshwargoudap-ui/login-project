@@ -40,7 +40,7 @@
     <div class="card product-card">
         <div class="product-image-wrap">
             <img
-                src="{{ url_for('static', filename='images/' + product.image) }}"
+                src="{{ product.image }}"
                 alt="{{ product.name }}"
                onerror="this.onerror=null;this.src=`{{ url_for('static', filename='images/demo.jpg') }}`;"
             >
