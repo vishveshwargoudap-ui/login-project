@@ -40,7 +40,15 @@ def ensure_product_seller_column():
 def create_app():
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.database.db'
+    import os
+
+    database_url=os.environ.get('DATABASE_URL', 'sqlite:///app.db')
+
+    if database_url:
+        database_url=database_url.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    app.config["SQLALCHEMY_DATABASE_URI"]=database_url
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'secret_key'
 
     db.init_app(app)
