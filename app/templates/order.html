@@ -27,42 +27,47 @@
         {% if is_seller_view %}
             <section class="card">
                 {% if orders %}
-                    <table class="payments-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Phone</th>
-                                <th>Items</th>
-                                <th>Payment Mode</th>
-                                <th>Transaction ID</th>
-                                <th>Total</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in orders %}
+                    <div class="payments-table-wrap">
+                        <table class="payments-table">
+                            <caption>Seller payment records</caption>
+                            <thead>
                                 <tr>
-                                    <td>#{{ order.id }}</td>
-                                    <td>{{ order.buyer_name }}</td>
-                                    <td>{{ order.buyer_phone }}</td>
-                                    <td>
-                                        {% for item in order.items %}
-                                            {{ item.product_name }} (x{{ item.quantity }}){% if not loop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                    <td>{{ order.payment_mode }}</td>
-                                    <td>{{ order.transaction_id or '-' }}</td>
-                                    <td>Rs {{ '%.2f'|format(order.total_amount) }}</td>
-                                    <td>
-                                        <form action="{{ url_for('auth.remove_payment', order_id=order.id) }}" method="POST">
-                                            <button type="submit" class="remove-payment-btn">Remove</button>
-                                        </form>
-                                    </td>
+                                    <th scope="col">Order ID</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Items</th>
+                                    <th scope="col">Payment Mode</th>
+                                    <th scope="col">Transaction ID</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Action</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                    <tr>
+                                        <td>#{{ order.id }}</td>
+                                        <td>{{ order.buyer_name }}</td>
+                                        <td>{{ order.buyer_phone }}</td>
+                                        <td>
+                                            <ul class="payment-items-list">
+                                                {% for item in order.items %}
+                                                    <li>{{ item.product_name }} <strong>x{{ item.quantity }}</strong></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </td>
+                                        <td>{{ order.payment_mode|replace('_', ' ')|title }}</td>
+                                        <td><code>{{ order.transaction_id or 'Not provided' }}</code></td>
+                                        <td><strong>Rs {{ '%.2f'|format(order.total_amount) }}</strong></td>
+                                        <td>
+                                            <form action="{{ url_for('auth.remove_payment', order_id=order.id) }}" method="POST" onsubmit="return confirm('Remove this payment record?');">
+                                                <button type="submit" class="remove-payment-btn" aria-label="Remove payment for order {{ order.id }}">Remove</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 {% else %}
                     <p class="empty">No payments yet.</p>
                 {% endif %}

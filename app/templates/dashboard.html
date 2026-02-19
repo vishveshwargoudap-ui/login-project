@@ -42,7 +42,7 @@
             <img
                 src="{{ url_for('static', filename='images/' + product.image) }}"
                 alt="{{ product.name }}"
-                onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/demo.jpg') }}';"
+               onerror="this.onerror=null;this.src=`{{ url_for('static', filename='images/demo.jpg') }}`;"
             >
         </div>
         <div class="product-info">
@@ -51,13 +51,15 @@
             <p class="product-description">{{ product.description or 'Fresh bakery item.' }}</p>
         </div>
         {% if user.role != 'seller' %}
-        <button
-            type="button"
-            class="add-cart-btn"
-            onclick='addToCart({{ product.id }}, {{ product.name|tojson }}, {{ product.price }}, {{ product.image|tojson }})'
-        >
-            Add to Cart
-        </button>
+       <button
+           class="add-cart-btn"
+           data-id="{{ product.id }}"
+           data-name="{{ product.name }}"
+           data-price="{{ product.price }}"
+           data-image="{{ product.image }}"
+           onclick="addToCart(this)">
+           Add to cart
+            </button>
         {% endif %}
         {% if user.role == 'seller' %}
         <form action="{{ url_for('auth.remove_product', product_id=product.id) }}" method="POST">
