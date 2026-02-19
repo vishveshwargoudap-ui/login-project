@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, session, url_for, jsonify,image
+from flask import render_template, request, redirect, session, url_for, jsonify
 from werkzeug.utils import secure_filename
 import os
 from ..models import User, Product, Order, OrderItem
