@@ -33,6 +33,7 @@
             
             <div class="cart-summary">
                 <h2 id="grand-total">Grand Total: Rs 0.00</h2>
+                <button id="buy-now" class="buy-now-btn" type="button">Buy Now</button>
             </div>
         </section>
     </div>
@@ -41,6 +42,7 @@
         const CART_KEY = "cartItems";
         const imageBase = "{{ url_for('static', filename='images/') }}";
         const fallbackImage = "{{ url_for('static', filename='images/demo.jpg') }}";
+        const buyNowBtn = document.getElementById("buy-now");
 
         function getCartItems() {
             try {
@@ -84,6 +86,7 @@
                     </tr>
                 `;
                 grandTotalEl.textContent = "Grand Total: Rs 0.00";
+                buyNowBtn.classList.add("disabled");
                 return;
             }
 
@@ -112,7 +115,16 @@
             }).join("");
 
             grandTotalEl.textContent = `Grand Total: Rs ${grandTotal.toFixed(2)}`;
+            buyNowBtn.classList.remove("disabled");
         }
+
+        buyNowBtn.addEventListener("click", () => {
+            const items = getCartItems();
+            if (!items.length) {
+                return;
+            }
+            window.location.href = "{{ url_for('auth.payment') }}";
+        });
 
         renderCart();
     </script>
