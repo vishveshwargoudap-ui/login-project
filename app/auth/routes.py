@@ -1,10 +1,12 @@
-from flask import render_template, request, redirect, session, url_for, jsonify
+from flask import render_template, request, redirect, session, url_for, jsonify,image
 from werkzeug.utils import secure_filename
 import os
 from ..models import User, Product, Order, OrderItem
 from ..extensions import db
 from .decorators import login_required
 from.import auth
+from cloudinary.uploader import upload
+from app.cloudinary_config import *
 
 def can_manage_products(user):
     if not user:
@@ -281,15 +283,19 @@ def add_product():
         price = request.form.get("price")
         description = request.form.get("description")
 
-        image = request.files["image"]
-        filename = secure_filename(image.filename)
-        image.save(os.path.join("app/static/images", filename))
-
+        image=request.files.get("image")
+    if image:
+        result=upload(image)
+        image_url=result.get("secure_url")
+    else:
+        image_url=None
+    
+    
         new_product = Product(
             name=name,
             price=price,
             description=description,
-            image=filename,
+            image=image_url,
             seller_id=current_user.id if current_user and current_user.role == "seller" else None
         )
 
