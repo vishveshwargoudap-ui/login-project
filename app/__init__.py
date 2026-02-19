@@ -1,7 +1,6 @@
 from flask import Flask
 from .extensions import db
 from sqlalchemy import text
-from .payments import payment_bp
 
 
 def ensure_user_role_column():
@@ -48,7 +47,6 @@ def create_app():
     
      
     from .auth import auth
-    app.register_blueprint(payment_bp)
     app.register_blueprint(auth)
 
     with app.app_context():

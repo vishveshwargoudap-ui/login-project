@@ -30,10 +30,9 @@
                 </thead>
                 <tbody id="cart-body"></tbody>
             </table>
-
+            
             <div class="cart-summary">
                 <h2 id="grand-total">Grand Total: Rs 0.00</h2>
-                <a id="buyNowBtn" class="buy-now-btn" href="{{ url_for('auth.payment') }}">Buy Now</a>
             </div>
         </section>
     </div>
@@ -42,7 +41,6 @@
         const CART_KEY = "cartItems";
         const imageBase = "{{ url_for('static', filename='images/') }}";
         const fallbackImage = "{{ url_for('static', filename='images/demo.jpg') }}";
-        const paymentUrl = "{{ url_for('auth.payment') }}";
 
         function getCartItems() {
             try {
@@ -77,7 +75,6 @@
         function renderCart() {
             const cartBody = document.getElementById("cart-body");
             const grandTotalEl = document.getElementById("grand-total");
-            const buyNowBtn = document.getElementById("buyNowBtn");
             const items = getCartItems();
 
             if (!items.length) {
@@ -87,9 +84,6 @@
                     </tr>
                 `;
                 grandTotalEl.textContent = "Grand Total: Rs 0.00";
-                buyNowBtn.classList.add("disabled");
-                buyNowBtn.setAttribute("aria-disabled", "true");
-                buyNowBtn.href = "#";
                 return;
             }
 
@@ -118,9 +112,6 @@
             }).join("");
 
             grandTotalEl.textContent = `Grand Total: Rs ${grandTotal.toFixed(2)}`;
-            buyNowBtn.classList.remove("disabled");
-            buyNowBtn.removeAttribute("aria-disabled");
-            buyNowBtn.href = paymentUrl;
         }
 
         renderCart();
