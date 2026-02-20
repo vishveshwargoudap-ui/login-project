@@ -282,13 +282,12 @@ def add_product():
         name = request.form.get("name")
         price = request.form.get("price")
         description = request.form.get("description")
-
-        image=request.files.get("image")
-    if image:
-        result=upload(image)
-        image_url=result.get("secure_url")
-    else:
         image_url=None
+        image=request.files.get("image")
+    if image and image.filename != '':
+        result=upload(image) #cloudinary upload
+        image_url=result.get("secure_url")
+   
     
     
         new_product = Product(
