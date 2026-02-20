@@ -18,12 +18,12 @@ def can_remove_product(user, product):
         return False
     return user.role == "seller"
 
-
+#home route
 @auth.route('/')
 def index():
     return render_template('index.html')
 
-
+#buyer and seller route for registration
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -39,7 +39,7 @@ def register():
 
     return render_template('register.html')
 
-
+#buyer and seller route for login
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -59,7 +59,7 @@ def login():
 
     return render_template('login.html')
 
-
+#buyer route for dashboard
 @auth.route('/dashboard')
 @login_required
 def dashboard():
@@ -78,7 +78,7 @@ def dashboard():
 
     return redirect('/login')
 
-
+#buyer route for add to cart
 @auth.route('/cart')
 @login_required
 def cart():
@@ -92,7 +92,7 @@ def cart():
         return redirect(url_for('auth.seller_dashboard'))
 
     return render_template('cart.html', user=user)
-
+#buyer route for payments
 @auth.route('/payment')
 @login_required
 def payment():
@@ -107,7 +107,7 @@ def payment():
 
     return render_template('payment.html', user=user)
 
-
+#seller route for dashboard
 @auth.route('/seller-dashboard')
 @login_required
 def seller_dashboard():
@@ -127,13 +127,13 @@ def seller_dashboard():
         show_payments_button=True
     )
 
-
+#seller route for dashboard
 @auth.route('/logout')
 def logout():
     session.pop('email', None)
     session.pop('user_id', None)
     return redirect('/login')
-
+#profile route for buyer
 @auth.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -155,7 +155,7 @@ def profile():
 
     return render_template('profile.html', user=user)
 
-
+#buyer route for placing order
 @auth.route('/place-order', methods=['POST'])
 @login_required
 def place_order():
@@ -229,7 +229,7 @@ def place_order():
         'redirect_url': url_for('auth.order_details', order_id=order.id)
     })
 
-
+#buyer route for order details
 @auth.route('/order/<int:order_id>')
 @login_required
 def order_details(order_id):
@@ -251,7 +251,7 @@ def order_details(order_id):
         is_seller_view=False
     )
 
-
+#seller route for payments
 @auth.route('/seller/payments')
 @login_required
 def seller_payments():
@@ -270,7 +270,7 @@ def seller_payments():
         is_seller_view=True
     )
 
-
+#seller route for adding proucts and removing products in cloudinary and data base
 @auth.route('/add_product', methods=['GET', 'POST'])
 @login_required
 def add_product():
@@ -284,9 +284,9 @@ def add_product():
         description = request.form.get("description")
         image_url=None
         image=request.files.get("image")
-    if image and image.filename != '':
-        result=upload(image) #cloudinary upload
-        image_url=result.get("secure_url")
+        if image and image.filename != '':
+               result=upload(image) #cloudinary upload
+               image_url=result.get("secure_url")
    
     
     
@@ -305,7 +305,7 @@ def add_product():
 
     return render_template('add_product.html')
 
-
+#seller route for removing products
 @auth.route('/remove_product/<int:product_id>', methods=['POST'])
 @login_required
 def remove_product(product_id):
@@ -322,7 +322,7 @@ def remove_product(product_id):
 
     return redirect(url_for('auth.seller_dashboard'))
 
-
+#seller route for removing payments
 @auth.route('/seller/remove-payment/<int:order_id>', methods=['POST'])
 @login_required
 def remove_payment(order_id):
