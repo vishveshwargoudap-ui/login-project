@@ -1,7 +1,7 @@
 from flask import Flask
 from .extensions import db
 import os
-
+  # Initialize the Flask application and configure it
 def create_app():
     app = Flask(__name__)
 

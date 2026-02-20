@@ -1,8 +1,8 @@
 import cloudinary
-
+# Configure Cloudinary with your credentials
 cloudinary.config(
     cloud_name="dkzdszqhs",
-    api_key="PASTE_API_KEY",
-    api_secret="PASTE_API_SECRET",
+    api_key="997859912123673 ",
+    api_secret="ArnndV05JrciFcxdasFkGuCkcKc api secret",
     secure=True
 )
