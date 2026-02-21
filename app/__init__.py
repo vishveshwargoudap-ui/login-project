@@ -1,5 +1,5 @@
 from flask import Flask
-from .models import db
+from .extensions import db
 import os
   # Initialize the Flask application and configure it
 def create_app():
