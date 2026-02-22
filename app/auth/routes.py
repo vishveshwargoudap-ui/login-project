@@ -90,6 +90,9 @@ def add_to_cart():
     price = data.get("price")
     image = data.get("image")
 
+    if not name:
+        return jsonify({"message":"product name is required"}),400
+
     if 'cart' not in session:
         session['cart'] = []
 
