@@ -1,4 +1,4 @@
-from .extensions import db
+from app.extensions import db
 import bcrypt
 #define user and product models
 class User(db.Model):
@@ -7,11 +7,12 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    role=db.Column(db.String(50), nullable=False, default='user')   
+    role=db.Column(db.String(50), nullable=False, default='buyer')   
 
-    def __init__(self, name, email, password):
+    def __init__(self, name, email, password,role='buyer'):
         self.name = name
         self.email = email
+        self.role=role
         self.password = bcrypt.hashpw(
             password.encode('utf-8'),
             bcrypt.gensalt()
