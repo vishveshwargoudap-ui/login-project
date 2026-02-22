@@ -1,5 +1,4 @@
 from flask import render_template, request, redirect, session, url_for, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
@@ -9,7 +8,6 @@ from .decorators import login_required
 from.import auth
 from cloudinary.uploader import upload
 from app.cloudinary_config import *
-db=SQLAlchemy()
 
 def can_manage_products(user):
     if not user:
