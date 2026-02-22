@@ -1,31 +1,35 @@
-function addTocart(button){
+function addToCart(button){
+
     const id = button.dataset.id;
-    const name=button.dataset.name;
-    const price=button.dataset.price;
-    const image=button.dataset.image;
+    const name = button.dataset.name;
+    const price = button.dataset.price;
+    const image = button.dataset.image;
 
-    if(!id || !name || !price || !image){
-        console.error('missing product data');
-        return;
-    }
-
-    fetch('/add_to_cart',{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
+    fetch('/add_to_cart', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
         },
-        body:JSON.stringify({
-            id:id,
-            name:name,
-            price:parseFloat(price),
-            image:image
-        })  
+        body: JSON.stringify({
+            id: id,
+            name: name,
+            price: price,
+            image: image
+        })
     })
-    .then(responce=>responce.json())
-    .then(data=>{
-        alert(data.message);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Server error");
+        }
+        return response.json();
     })
-    .catch(error=>{
-        console.error("Error",error);
+    .then(data => {
+        console.log("Server response:", data);
+        alert(data.message || "Added to cart");
     })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong");
+    });
+
 }
