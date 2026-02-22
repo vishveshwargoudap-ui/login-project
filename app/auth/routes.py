@@ -83,8 +83,9 @@ def dashboard():
 @login_required
 def add_to_cart():
 
-    data = request.get_json()
-
+    data = request.get_json(force=True)
+    if not data:
+        return jsonify({"message": "no data received"}), 400
     id = data.get("id")
     name = data.get("name")
     price = data.get("price")
