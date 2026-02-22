@@ -79,6 +79,32 @@ def dashboard():
 
     return redirect('/login')
 
+@auth.route('/add_to_cart', methods=['POST'])
+@login_required
+def add_to_cart():
+
+    data = request.get_json()
+
+    id = data.get("id")
+    name = data.get("name")
+    price = data.get("price")
+    image = data.get("image")
+
+    if 'cart' not in session:
+        session['cart'] = []
+
+    session['cart'].append({
+        "id": id,
+        "name": name,
+        "price": float(price),
+        "qty": 1,
+        "image": image
+    })
+
+    session.modified = True
+
+    return jsonify({"message": f"{name} added to cart"})
+
 #buyer route for add to cart
 @auth.route('/cart')
 @login_required
@@ -91,8 +117,12 @@ def cart():
         return redirect(url_for('auth.login'))
     if user.role == 'seller':
         return redirect(url_for('auth.seller_dashboard'))
+    
+    cart_items =session.get('cart',[])
+    grand_total = sum(item['price']*item['qty']for item in cart_items)
 
-    return render_template('cart.html', user=user)
+    return render_template('cart.html', user=user, cart_items=cart_items, grand_total=grand_total)
+       
 #buyer route for payments
 @auth.route('/payment')
 @login_required
