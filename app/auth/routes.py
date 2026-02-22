@@ -263,7 +263,7 @@ def seller_payments():
     if not can_manage_products(user):
         return redirect(url_for('auth.dashboard'))
 
-    orders = Order.query.filter_by(buyer_id=user.id).all()
+    orders = Order.query.filter_by(user_id=user.id).all()
     return render_template(
         'order.html',
         user=user,
