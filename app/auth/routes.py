@@ -2,8 +2,8 @@ from flask import render_template, request, redirect, session, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
-from ..models import User, Product, Order, OrderItem
-from ..extensions import db
+from app.models import User,Product,Order,OrderItem
+from app.extensions import db
 from .decorators import login_required
 from.import auth
 from cloudinary.uploader import upload
