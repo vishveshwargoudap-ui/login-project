@@ -1,4 +1,6 @@
 from flask import render_template, request, redirect, session, url_for, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
 from ..models import User, Product, Order, OrderItem
@@ -7,6 +9,7 @@ from .decorators import login_required
 from.import auth
 from cloudinary.uploader import upload
 from app.cloudinary_config import *
+db=SQLAlchemy()
 
 def can_manage_products(user):
     if not user:
@@ -262,7 +265,7 @@ def seller_payments():
     if not can_manage_products(user):
         return redirect(url_for('auth.dashboard'))
 
-    orders = Order.query.order_by(Order.created_at.desc()).all()
+    orders = Order.query.filter_by(buyer_id=user.id).all()
     return render_template(
         'order.html',
         user=user,

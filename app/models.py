@@ -30,6 +30,7 @@ class Product(db.Model):
     price=db.Column(db.Float,nullable=False)
     description=db.Column(db.String(300))
     image = db.Column(db.Text, nullable=True)
+    seller_id=db.Column(db.Integerdb.ForeignKey('users.id'),nullable=False)
 
 
 class Order(db.Model):
