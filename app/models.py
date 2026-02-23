@@ -7,6 +7,7 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    phone =db.Column(db.String(20))
     role=db.Column(db.String(50), nullable=False, default='buyer')   
 
     def __init__(self, name, email, password,role='buyer'):
