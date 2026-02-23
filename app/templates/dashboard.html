@@ -53,11 +53,11 @@
         {% if user.role != 'seller' %}
        <button
            class="add-cart-btn"
-           onclick="addToCart(this)"
            data-id="{{ product.id }}"
            data-name="{{ product.name }}"
            data-price="{{ product.price }}"
-           data-image="{{ product.image }}">
+           data-image="{{ product.image }}"
+           onclick="addToCart(this)">
            Add to cart
             </button>
         {% endif %}
@@ -69,6 +69,7 @@
     </div>
     {% endfor %}
 </div>
-<script src="{{ url_for('static', filename='js/cart.js') }}?v=4"></script>
+
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 </body>
 </html>
