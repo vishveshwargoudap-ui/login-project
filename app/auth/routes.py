@@ -187,13 +187,13 @@ def seller_dashboard():
     if not can_manage_products(user):
         return redirect(url_for('auth.dashboard'))
 
-    products = Product.query.all()
+    seller_items=(db.session.query(OrderItem).join(Product).filter(Product.seller_id==user.id).all())
     return render_template(
-        'dashboard.html',
+        'order.html',
         user=user,
-        products=products,
+        orders=seller_items,
         can_add_product=True,
-        show_payments_button=True
+        is_seller_view=True
     )
 
 #seller route for dashboard

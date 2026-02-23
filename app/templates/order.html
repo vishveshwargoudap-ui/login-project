@@ -43,26 +43,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for order in orders %}
+                                {% for item in orders %}
                                     <tr>
-                                        <td>#{{ order.id }}</td>
-                                        <td>{{ order.buyer_name }}</td>
-                                        <td>{{ order.buyer_phone }}</td>
+                                        <td>#{{ item.order.id }}</td>
+                                        <td>{{ item.order.user_id}}</td>
                                         <td>
-                                            <ul class="payment-items-list">
-                                                {% for item in order.items %}
-                                                    <li>{{ item.product_name }} <strong>x{{ item.quantity }}</strong></li>
-                                                {% endfor %}
-                                            </ul>
+                                            {{ item.product.name}}
+                                            <strong>x{{item.quantity}}</strong>
                                         </td>
-                                        <td>{{ order.payment_mode|replace('_', ' ')|title }}</td>
-                                        <td><code>{{ order.transaction_id or 'Not provided' }}</code></td>
-                                        <td><strong>Rs {{ '%.2f'|format(order.total_amount) }}</strong></td>
+
                                         <td>
-                                            <form action="{{ url_for('auth.remove_payment', order_id=order.id) }}" method="POST" onsubmit="return confirm('Remove this payment record?');">
-                                                <button type="submit" class="remove-payment-btn" aria-label="Remove payment for order {{ order.id }}">Remove</button>
-                                            </form>
+                                            <strong>Rs{{item.product.price*item.quantity}}</strong>
                                         </td>
+
+                                        <td>
+
+                                        </td>
+                                         <form action="{{url_for('auth.remove_payment',order_id=item.order.id)}}" method="POST">
+                                            <button type="submit">remove</button>
+                                         </form>
+                                        </td>
+
                                     </tr>
                                 {% endfor %}
                             </tbody>
