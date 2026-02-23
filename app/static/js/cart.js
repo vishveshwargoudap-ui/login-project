@@ -46,7 +46,7 @@ function placeOrder(){
         }
     })
     .catch(error=>{
-        console.error("Error:",error);
+        console.error(error);
         alert("An error occurred while placing the order.");
     });
 }
