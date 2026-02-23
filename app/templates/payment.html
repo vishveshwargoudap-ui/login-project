@@ -50,24 +50,18 @@
 
             <aside class="summary-card">
                 <h3>Order Summary</h3>
-                <p id="itemCount">Items: 0</p>
-                <p id="orderTotal">Total: Rs 0.00</p>
+               <p>Items:{{cart_items|length}}</p>
+               <p>Total: Rs{{"%.2f"|format(grand_total)}}</p>
                 <p class="note">After confirmation, your cart will be cleared.</p>
             </aside>
         </section>
     </main>
 
     <script>
-        const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
-        const itemCountEl = document.getElementById("itemCount");
-        const totalEl = document.getElementById("orderTotal");
         const payBtn = document.getElementById("pay-btn");
         const phoneInput = document.getElementById("phone");
         const utrInput = document.getElementById("utr");
         const manualUpiDetails = document.getElementById("manualUpiDetails");
-
-        const totalQty = cartItems.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
-        const totalPrice = cartItems.reduce((sum, item) => sum + ((Number(item.qty) || 0) * (Number(item.price) || 0)), 0);
 
         itemCountEl.textContent = `Items: ${totalQty}`;
         totalEl.textContent = `Total: Rs ${totalPrice.toFixed(2)}`;
