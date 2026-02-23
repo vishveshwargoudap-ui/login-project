@@ -135,5 +135,52 @@
 
         updateMethodView();
     </script>
+      const payBtn = document.getElementById("pay-btn");
+const phoneInput = document.getElementById("phone");
+const utrInput = document.getElementById("utr");
+
+payBtn.addEventListener("click", async function () {
+
+    const method = document.querySelector('input[name="method"]:checked')?.value || "cash";
+
+    if (!phoneInput.value.trim()) {
+        alert("Please enter phone number.");
+        phoneInput.focus();
+        return;
+    }
+
+    if (method === "upi" && !utrInput.value.trim()) {
+        alert("Please enter Transaction ID for UPI.");
+        utrInput.focus();
+        return;
+    }
+
+    try {
+        const response = await fetch("{{ url_for('auth.place_order') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                payment_mode: method,
+                transaction_id: method === "upi" ? utrInput.value.trim() : "",
+                phone: phoneInput.value.trim()
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+            alert(data.message || "Failed to place order.");
+            return;
+        }
+
+        window.location.href = data.redirect_url;
+
+    } catch (error) {
+        alert("Something went wrong. Try again.");
+        console.error(error);
+    }
+});
 </body>
 </html>
