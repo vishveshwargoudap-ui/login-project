@@ -25,7 +25,7 @@
         <a href="{{url_for('auth.add_product')}}" class="profile-btn">Add Product</a>
         {% endif %}
         {% if show_payments_button %}
-        <a href="{{url_for('auth.payment')}}" class="profile-btn"></a>payments</a>
+        <a href="{{url_for('auth.seller_Payment')}}" class="profile-btn">Payments</a>
         {% endif %}
         {% if user.role != 'seller' %}
         <a href="{{url_for('auth.cart')}}" class="cart-btn">Cart</a>
@@ -71,5 +71,19 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% with messages = get_flashed_messages(with_categories=true) %}
+     {% if messages %}
+        {% for categories,message in messages %}
+          <script>
+            swal.fire({
+                icon:"{{'sucess' if categories == 'success' else 'info'}}",
+                title:"{{message}}",
+                confirmButtioncolor:"#3085d6",
+            })
+          </script>
+          {% endfor %}
+        {% endif %}
+        {% endwith %}
+
 </body>
 </html>
