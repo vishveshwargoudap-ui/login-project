@@ -229,7 +229,7 @@ def place_order():
        product_id = item.get('id')
        quantity = int(item.get('qty', 1))
 
-       product= product.query.get(product_id)
+       product= Product.query.get(product_id)
        if not product:
               continue
        
@@ -254,7 +254,7 @@ def place_order():
         oi.order_id = order.id
         db.session.add(oi)
 
-        db.session.commit()
+    db.session.commit()
     session['cart'] = []
     session.modified = True
 
@@ -276,7 +276,7 @@ def order_details(order_id):
         return redirect(url_for('auth.login'))
 
     order = Order.query.get_or_404(order_id)
-    if user.role != 'seller' and order.buyer_id != user.id:
+    if user.role != 'seller' and order.user_id != user.id:
         return redirect(url_for('auth.dashboard'))
 
     return render_template(
