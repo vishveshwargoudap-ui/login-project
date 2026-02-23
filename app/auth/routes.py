@@ -370,3 +370,16 @@ def remove_payment(order_id):
     db.session.commit()
 
     return redirect(url_for('auth.seller_payments'))
+
+@auth.route('/remove_from_cart', methods=['POST'])
+@login_required
+def remove_from_cart():
+    item_id = request.form.get('id')
+
+    cart = session.get('cart', [])
+    cart = [item for item in cart if str(item.get('id')) != str(item_id)]
+
+    session['cart'] = cart
+    session.modified = True
+
+    return redirect(url_for('auth.cart'))
