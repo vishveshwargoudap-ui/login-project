@@ -27,6 +27,7 @@ fetch("/add_to_cart",{
 });
 }
 function placeOrder(){
+    console.log("place order clicked");
     fetch("/place-order",{
         method:"POST",
         headers:{
