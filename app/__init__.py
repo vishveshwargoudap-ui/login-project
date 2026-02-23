@@ -21,8 +21,5 @@ def create_app():
     from .auth import auth
     app.register_blueprint(auth)
 
-    with app.app_context():
-        db.create_all()
-
     return app
 
