@@ -42,7 +42,7 @@
                     {% for item in cart_items %}
                     <tr>
                         <td>
-                            <img src="{{ url_for('static', filename='images/' + item.image) }}"
+                            <img src="{{product.image}}">
                                  width="60">
                         </td>
 
@@ -80,7 +80,7 @@
             <h2>Grand Total: Rs {{ "%.2f"|format(grand_total) }}</h2>
 
             {% if cart_items %}
-                <a href="{{ url_for('auth.payment') }}">
+               <a href="#" onclick="placeOrder()">
                     <button class="buy-now-btn">
                         Buy Now
                     </button>

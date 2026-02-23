@@ -17,7 +17,7 @@
         </header>
 
         <section class="payment-grid">
-            <form action="{{ url_for('auth.payment')}}"method="POST" id="paymentForm" class="payment-card">
+            <form action="{{ url_for('auth.place_order')}}"method="POST" id="paymentForm" class="payment-card">
                 <div class="method-details">
                     <label for="phone">Phone Number</label>
                     <input id="phone" type="text" placeholder="Enter phone number" value="{{ user.phone or '' }}">

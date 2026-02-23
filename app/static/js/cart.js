@@ -2,7 +2,7 @@ function addToCart(button){
     console.log("add to cart clicked");
 const id=button.dataset.id;
 const name=button.dataset.name;
-const price=button.dataset.price;
+const price=parseFloat(button.dataset.price);
 const image=button.dataset.image;
 
 fetch("/add_to_cart",{
@@ -23,5 +23,6 @@ fetch("/add_to_cart",{
 })
 .catch(error=>{
     console.error("Error:",error);
+    alert("An error occurred while adding to cart.");
 });
 }
