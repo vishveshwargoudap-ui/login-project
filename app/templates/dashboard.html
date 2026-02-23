@@ -19,18 +19,18 @@
 
     <div class="nav-actions">
         {% if user.role != 'seller' %}
-        <button class="profile-btn" onclick="goProfile()">Profile</button>
+        <a href="{{url_for('auth.profile')}}"class="profile-btn">profile</a>
         {% endif %}
         {% if can_add_product %}
-        <button class="profile-btn" onclick="goAddProduct()">Add Product</button>
+        <a href="{{url_for('auth.add_product')}}" class="profile-btn">Add Product</a>
         {% endif %}
         {% if show_payments_button %}
-        <button class="profile-btn" onclick="goPayments()">Payments</button>
+        <a href="{{url_for('auth.payment')}}" class="profile-btn"></a>payments</a>
         {% endif %}
         {% if user.role != 'seller' %}
-        <button class="cart-btn" onclick="goCart()">Cart</button>
+        <a href="{{url_for('auth.cart')}}" class="cart-btn">Cart</a>
         {% endif %}
-        <button onclick="window.location.href='/logout'" class="logout">logout</button>
+        <a href="{{url_for('auth.logout')}}" class="logout">Logout</a>
     </div>
 </div>
 
