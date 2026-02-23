@@ -128,53 +128,7 @@ def cart():
     return render_template('cart.html', user=user, cart_items=cart_items, grand_total=grand_total)
        
 #buyer route for payments
-@auth.route('/payment' , methods=['GET' , 'POST'])
-@login_required
-def payment():
-    if 'email' not in session:
-        return redirect('/login')
-
-    user = User.query.filter_by(email=session['email']).first()
-    if not user:
-        return redirect(url_for('auth.login'))
-
-    if user.role == 'seller':
-        return redirect(url_for('auth.seller_dashboard'))
-
-    # 🔹 Get cart from session
-    cart_items = session.get('cart', [])
-
-    if not cart_items:
-        flash("No valid items in order.")
-        return redirect(url_for('auth.cart'))
-
-    # 🔹 Calculate total
-    grand_total = sum(
-        float(item.get('price', 0)) * int(item.get('qty', 1))
-        for item in cart_items
-    )
-
-    #Handel form submission
-    if request.method == 'POST':
-        phone= request.form.get('phone')
-        method = request.form.get('method')
-        utr = request.form.get('utr')
-
-        print("payment received:", phone, method, utr)
-
-        #clear cart
-        session['cart'] = []
-
-        flash("Payment successful! Your order has been placed.")
-
-        return redirect(url_for('auth.dashboard')) 
-    
-    return render_template(
-        'payment.html',
-        user=user,
-        cart_items=cart_items,
-        grand_total=grand_total
-    )
+#removed payments from here (due to confusion for seller and buyer payments) and added in place-order route
 
 #seller route for dashboard
 @auth.route('/seller-dashboard')
@@ -272,39 +226,35 @@ def place_order():
     total_amount = 0
     order_items = []
     for item in cart_items:
-        product_name = (item.get('name') or '').strip()
-        try:
-            quantity = int(item.get('qty') or 0)
-            price = float(item.get('price') or 0)
-        except (TypeError, ValueError):
-            continue
-        if not product_name or quantity <= 0:
-            continue
-        total_amount += quantity * price
-        order_items.append(
-            OrderItem(
-                product_name=product_name,
-                quantity=quantity,
-                price=price
-            )
-        )
+       product_id = item.get('id')
+       quantity = int(item.get('qty', 1))
+
+       product= product.query.get(product_id)
+       if not product:
+              continue
+       
+       total_amount += quantity * float(product.price)
+
+       order_items.append(OrderItem(
+           product_id=product.id,
+           quantity=quantity
+       ))
 
     if not order_items:
         return jsonify({'ok': False, 'message': 'No valid items in order.'}), 400
 
     payment_mode = 'Online Payment' if payment_mode_raw == 'upi' else 'Offline Payment'
     order = Order(
-        buyer_id=user.id,
-        buyer_name=user.name,
-        buyer_phone=buyer_phone,
-        payment_mode=payment_mode,
-        transaction_id=transaction_id if payment_mode_raw == 'upi' else None,
-        total_amount=total_amount
+       user_id=user.id
     )
-    order.items = order_items
-
     db.session.add(order)
-    db.session.commit()
+    db.session.flush()  # Ensure order is assigned an ID before adding items
+
+    for oi in order_items:
+        oi.order_id = order.id
+        db.session.add(oi)
+
+        db.session.commit()
     session['cart'] = []
     session.modified = True
 
