@@ -193,7 +193,7 @@ def remove_from_cart():
 
 
 #buyer route for placing order
-@auth.route('/place_order', methods=['POST'])
+@auth.route('/place-order', methods=['POST'])
 @login_required
 def place_order():
 

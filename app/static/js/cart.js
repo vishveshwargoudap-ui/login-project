@@ -27,7 +27,7 @@ fetch("/add_to_cart",{
 });
 }
 function placeOrder(){
-    fetch("/place_order",{
+    fetch("/place-order",{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
