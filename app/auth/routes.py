@@ -100,7 +100,7 @@ def add_to_cart():
     session['cart'].append({
         "id": id,
         "name": name,
-        "price": float(price),
+        "price": float(data['price']),
         "qty": 1,
         "image": image
     })
@@ -237,7 +237,7 @@ def place_order():
         return jsonify({'ok': False, 'message': 'Sellers cannot place orders.'}), 403
 
     data = request.get_json(silent=True) or {}
-    cart_items = data.get('items') or []
+    cart_items = session.get('cart', [])
     payment_mode_raw = (data.get('payment_mode') or '').strip().lower()
     transaction_id = (data.get('transaction_id') or '').strip()
 
@@ -290,6 +290,8 @@ def place_order():
 
     db.session.add(order)
     db.session.commit()
+    session['cart'] = []
+    session.modified = True
 
     return jsonify({
         'ok': True,
