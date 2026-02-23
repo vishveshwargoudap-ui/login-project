@@ -63,6 +63,9 @@
         const utrInput = document.getElementById("utr");
         const manualUpiDetails = document.getElementById("manualUpiDetails");
 
+        itemCountEl.textContent = `Items: ${totalQty}`;
+        totalEl.textContent = `Total: Rs ${totalPrice.toFixed(2)}`;
+
         function getSelectedMethod() {
             return document.querySelector('input[name="method"]:checked')?.value || "upi";
         }
@@ -130,7 +133,7 @@
             }
         });
 
-updateMethodView();
+        updateMethodView();
     </script>
 </body>
 </html>
