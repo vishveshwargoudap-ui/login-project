@@ -26,3 +26,26 @@ fetch("/add_to_cart",{
     alert("An error occurred while adding to cart.");
 });
 }
+function placeOrder(){
+    fetch("/place_order",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            payment_mode:"cash"
+        })
+    })
+    .then(response=>response.json())
+    .then(data=>{
+        if(data.ok){
+            window.location.href=data.redirect_url;
+        } else{
+            alert(data.messsage);
+        }
+    })
+    .catch(error=>{
+        console.error("Error:",error);
+        alert("An error occurred while placing the order.");
+    });
+}

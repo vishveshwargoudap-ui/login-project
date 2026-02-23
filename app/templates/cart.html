@@ -80,7 +80,7 @@
 
             {% if cart_items %}
                <form action="{{url_for('auth.place_order')}}" method="POST">
-                <button type="submit" class="buy-now-btn">place order</button>
+                <button type="button"class="buy-now-btn" onclick="placeOrder()">place order</button>
                </form>
             {% endif %}
         </div>
@@ -88,6 +88,7 @@
     </section>
 
 </div>
+<script src="{{url_for('static',filename='js/cart.js')}}"></script>
 
 </body>
 </html>
