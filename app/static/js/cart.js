@@ -31,7 +31,7 @@ function addToCart(button) {
 function placeOrder() {
     console.log("Place order clicked");
 
-    fetch("/place-order",{method:POST}, {
+    fetch("/place-order", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
