@@ -69,13 +69,13 @@
     </div>
     {% endfor %}
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 {% with messages = get_flashed_messages(with_categories=true) %}
      {% if messages %}
         {% for categories,message in messages %}
           <script>
-            swal.fire({
+            Swal.fire({
                 icon:"{{'sucess' if categories == 'success' else 'info'}}",
                 title:"{{message}}",
                 confirmButtioncolor:"#3085d6",

@@ -80,13 +80,13 @@
             input.addEventListener("change", updateMethodView);
         });
 
-        // Attach checkout flow only to the Pay button click.
+        
+    if (payBtn) {
         payBtn.addEventListener("click", async (event) => {
-            // Prevent the form's default submit/navigation behavior.
             event.preventDefault();
 
             if (!phoneInput.value.trim()) {
-                alert("Please enter phone number.");
+                alert("Please enter your phone number");
                 phoneInput.focus();
                 return;
             }
@@ -129,6 +129,7 @@
                 alert("Unable to place order right now. Please try again.");
             }
         });
+    }
 
         updateMethodView();
     </script>
