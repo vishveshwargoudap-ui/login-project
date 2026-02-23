@@ -1,4 +1,5 @@
 function addToCart(button){
+    console.log("add to cart clicked");
 const id=button.dataset.id;
 const name=button.dataset.name;
 const price=button.dataset.price;
@@ -17,6 +18,7 @@ fetch("/add_to_cart",{
     })
 }).then(response=>response.json())
 .then(data=>{
+    console.log(data);
     alert(data.message);
 })
 .catch(error=>{
