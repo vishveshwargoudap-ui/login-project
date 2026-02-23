@@ -128,7 +128,7 @@ def cart():
     return render_template('cart.html', user=user, cart_items=cart_items, grand_total=grand_total)
        
 #buyer route for payments
-@auth.route('/payment')
+@auth.route('/payment' , methods=['GET' , 'POST'])
 @login_required
 def payment():
     if 'email' not in session:
@@ -154,6 +154,18 @@ def payment():
         for item in cart_items
     )
 
+    #Handel form submission
+    if request.method == 'POST':
+        phone= request.form.get('phone')
+        method = request.form.get('method')
+        utr = request.form.get('utr')
+
+        print("payment received:", phone, method, utr)
+
+        #clear cart
+        session['cart'] = []
+
+        flash("Payment successful! Your order has been placed.")
     return render_template(
         'payment.html',
         user=user,

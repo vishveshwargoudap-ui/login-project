@@ -17,7 +17,7 @@
         </header>
 
         <section class="payment-grid">
-            <form id="paymentForm" class="payment-card">
+            <form action="{{ url_for('payment')}}"method="POST" id="paymentForm" class="payment-card">
                 <div class="method-details">
                     <label for="phone">Phone Number</label>
                     <input id="phone" type="text" placeholder="Enter phone number" value="{{ user.phone or '' }}">
@@ -45,7 +45,7 @@
                     </div>
                 </label>
 
-               <button id="pay-btn" type="button" class="confirm-btn">pay now</button>
+               <button type="submit" class="confirm-btn">pay now</button>
             </form>
 
             <aside class="summary-card">
