@@ -166,6 +166,9 @@ def payment():
         session['cart'] = []
 
         flash("Payment successful! Your order has been placed.")
+
+        return redirect(url_for('auth.dashboard')) 
+    
     return render_template(
         'payment.html',
         user=user,
