@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, session, url_for, jsonify
+from flask import render_template, request, redirect, session, url_for, jsonify,flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
@@ -137,10 +137,29 @@ def payment():
     user = User.query.filter_by(email=session['email']).first()
     if not user:
         return redirect(url_for('auth.login'))
+
     if user.role == 'seller':
         return redirect(url_for('auth.seller_dashboard'))
 
-    return render_template('payment.html', user=user)
+    # 🔹 Get cart from session
+    cart_items = session.get('cart', [])
+
+    if not cart_items:
+        flash("No valid items in order.")
+        return redirect(url_for('auth.cart'))
+
+    # 🔹 Calculate total
+    grand_total = sum(
+        float(item.get('price', 0)) * int(item.get('qty', 1))
+        for item in cart_items
+    )
+
+    return render_template(
+        'payment.html',
+        user=user,
+        cart_items=cart_items,
+        grand_total=grand_total
+    )
 
 #seller route for dashboard
 @auth.route('/seller-dashboard')
