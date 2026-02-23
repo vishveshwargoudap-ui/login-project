@@ -193,11 +193,9 @@ def remove_from_cart():
 
 
 #buyer route for placing order
-@auth.route('/place-order', methods=['POST'])
+@auth.route('/place_order', methods=['POST'])
 @login_required
 def place_order():
-    print("Placing order...")
-    return redirect(url_for('auth.payment'))  # Temporary redirect for testing
 
     if 'email' not in session:
         return jsonify({'ok': False, 'message': 'Please login first.'}), 401
