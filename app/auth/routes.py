@@ -140,7 +140,8 @@ def seller_dashboard():
     user = User.query.filter_by(email=session['email']).first()
     if not can_manage_products(user):
         return redirect(url_for('auth.dashboard'))
-
+    
+    seller_products = Product.query.filter_by(seller_id=user.id).all()
     seller_items=(db.session.query(OrderItem).join(Product).filter(Product.seller_id==user.id).all())
     return render_template(
         'dashboard.html',
