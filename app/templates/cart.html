@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Your Cart</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
 </head>
 <body>
@@ -20,6 +21,7 @@
             Continue Shopping
         </a>
     </header>
+
 
     <section class="cart-panel">
 
@@ -40,15 +42,21 @@
                     {% for item in cart_items %}
                     <tr>
                         <td>
-                            <img src="{{ item.image }}" width="60">
+                            <img src="{{item.image}}" width="60">
                         </td>
+
                         <td>{{ item.name }}</td>
+
                         <td>Rs {{ "%.2f"|format(item.price) }}</td>
+
                         <td>{{ item.qty }}</td>
+
                         <td>
                             Rs {{ "%.2f"|format(item.price * item.qty) }}
                         </td>
+
                         <td>
+                            <!-- Optional remove button -->
                             <form action="{{ url_for('auth.remove_from_cart') }}" method="POST">
                                 <input type="hidden" name="id" value="{{ item.id }}">
                                 <button type="submit">Remove</button>
@@ -66,41 +74,22 @@
             </tbody>
         </table>
 
+
         <div class="cart-summary">
             <h2>Grand Total: Rs {{ "%.2f"|format(grand_total) }}</h2>
 
             {% if cart_items %}
-            <form method="POST" action="{{ url_for('auth.place_order') }}">
-
-                <div style="margin-bottom:10px;">
-                    <label>
-                        <input type="radio" name="payment_mode" value="cash" required>
-                        Cash on Delivery
-                    </label>
-
-                    <label style="margin-left:15px;">
-                        <input type="radio" name="payment_mode" value="upi" required>
-                        UPI
-                    </label>
-                </div>
-
-                <div style="margin-bottom:10px;">
-                    <input type="text"
-                           name="transaction_id"
-                           placeholder="Enter UTR (Only if UPI)">
-                </div>
-
-                <button type="submit" id="checkout-btn">
-                    Place Order
-                </button>
-
-            </form>
+              <form method="POST"
+                    action="{{ url_for('auth.place_order') }}">
+                    <button type="submit" id="checkout-btn">Place Order</button>
+                </form> 
             {% endif %}
         </div>
 
     </section>
 
 </div>
+<script src="{{url_for('static',filename='js/cart.js')}}"></script>
 
 </body>
 </html>
