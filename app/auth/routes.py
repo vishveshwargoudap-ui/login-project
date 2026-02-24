@@ -146,6 +146,7 @@ def seller_dashboard():
     return render_template(
         'dashboard.html',
         user=user,
+        products=seller_products,
         orders=seller_items,
         show_payments_button=True,
         can_add_product=True,
