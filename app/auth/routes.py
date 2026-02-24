@@ -143,7 +143,7 @@ def seller_dashboard():
 
     seller_items=(db.session.query(OrderItem).join(Product).filter(Product.seller_id==user.id).all())
     return render_template(
-        'order.html',
+        'dashboard.html',
         user=user,
         orders=seller_items,
         can_add_product=True,
