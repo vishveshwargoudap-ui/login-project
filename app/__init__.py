@@ -17,7 +17,11 @@ def create_app():
     app.config["SESSION_COOKIE_SAMESITE"]="Lax"
 
     db.init_app(app)
+      # Import models to register them with SQLAlchemy
     from .import models
+    with app.app_context():
+        db.create_all()
+      # Register blueprints
 
     from .auth import auth
     app.register_blueprint(auth)
