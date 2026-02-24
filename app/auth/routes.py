@@ -284,7 +284,7 @@ def place_order():
         return jsonify({
             'ok': True,
             'order_id': order.id,
-            'redirect_url': url_for('auth.order_details', order_id=order.id)
+            'redirect_url': url_for('auth.payment', order_id=order.id)
         })
 
     except Exception as e:
