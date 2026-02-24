@@ -79,7 +79,10 @@
             <h2>Grand Total: Rs {{ "%.2f"|format(grand_total) }}</h2>
 
             {% if cart_items %}
-              <button class="buy-now-btn" onclick="placeOrder()">place order</button>
+              <form method="POST"
+                    action="{{ url_for('auth.place_order') }}">
+                    <button type="submit" id="checkout-btn">Proceed to Payment</button>
+                </form> 
             {% endif %}
         </div>
 

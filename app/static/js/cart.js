@@ -28,3 +28,29 @@ function addToCart(button) {
     });
 }
 
+function placeOrder() {
+    console.log("Place order clicked");
+
+    fetch("/place-order", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            payment_mode: "cash"
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.ok) {
+            window.location.href = data.redirect_url;
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Error placing order");
+    });
+}
