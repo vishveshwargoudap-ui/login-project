@@ -223,7 +223,7 @@ def place_order():
     if payment_mode_raw == 'upi' and not transaction_id:
         return jsonify({'ok': False, 'message': 'Transaction ID is required for online payment.'}), 400
 
-    buyer_phone = (data.get("phone") or"").strip()
+    buyer_phone = (user.phone or"").strip()
     if not buyer_phone:
         return jsonify({'ok': False, 'message': 'Please add your phone number in profile before ordering.'}), 400
 
