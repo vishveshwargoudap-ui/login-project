@@ -241,7 +241,8 @@ def place_order():
 
        order_items.append(OrderItem(
            product_id=product.id,
-           quantity=quantity
+           quantity=quantity,
+           price=product.price
        ))
 
     if not order_items:
@@ -249,7 +250,8 @@ def place_order():
 
     payment_mode = 'Online Payment' if payment_mode_raw == 'upi' else 'Offline Payment'
     order = Order(
-       user_id=user.id
+       user_id=user.id,
+       total_amount=total_amount,
     )
     db.session.add(order)
     db.session.flush()  # Ensure order is assigned an ID before adding items
