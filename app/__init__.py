@@ -17,6 +17,9 @@ def create_app():
     app.config["SESSION_COOKIE_SAMESITE"]="Lax"
 
     db.init_app(app)
+    from .import models
+
+    return app
 
     from .auth import auth
     app.register_blueprint(auth)
