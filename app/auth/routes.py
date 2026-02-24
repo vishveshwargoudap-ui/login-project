@@ -68,7 +68,7 @@ def dashboard():
         user = User.query.filter_by(email=session['email']).first()
         if not user:
             return redirect(url_for('auth.login'))
-        products = Product.query.all()
+        products = Product.query.filter_by(seller_id=user.id).all() if user.role == 'seller' else Product.query.all()
         return render_template(
             'dashboard.html',
             user=user,
@@ -146,6 +146,7 @@ def seller_dashboard():
         'dashboard.html',
         user=user,
         orders=seller_items,
+        show_payments_button=True,
         can_add_product=True,
         is_seller_view=True
     )
