@@ -199,95 +199,98 @@ def remove_from_cart():
 @auth.route('/place-order', methods=['POST'])
 @login_required
 def place_order():
+    try:
+        # ---- Check login ----
+        if 'email' not in session:
+            return jsonify({'ok': False, 'message': 'Please login first.'}), 401
 
-    if 'email' not in session:
-        flash('please login')
-        return redirect(url_for('auth.login'))
+        user = User.query.filter_by(email=session['email']).first()
+        if not user:
+            return jsonify({'ok': False, 'message': 'User not found.'}), 404
 
-    user = User.query.filter_by(email=session['email']).first()
-    if not user:
-       flash('user not found')
-       return redirect(url_for('auth.login'))
-    if user.role == 'seller':
-        flash('seller can not place order ')
-        return redirect(url_for('auth.dashboard'))
+        if user.role == 'seller':
+            return jsonify({'ok': False, 'message': 'Sellers cannot place orders.'}), 403
 
-    payment_mode_raw = (request.form.get('method')or'').strip().lower()
-    transaction_id = (request.form.get('utr') or '').strip()
-    cart_items=session.get('cart',[])
-    if not cart_items:
-        flash('your cart is empty')
-        return redirect(url_for('auth.cart'))
+        # ---- Read JSON ----
+        data = request.get_json()
+        if not data:
+            return jsonify({'ok': False, 'message': 'Invalid request data.'}), 400
 
-    if payment_mode_raw not in {'upi', 'cash'}:
-        flash('Invalid payment mode.')
-        return redirect(url_for('auth.payment'))
+        payment_mode_raw = (data.get('payment_mode') or '').strip().lower()
+        transaction_id = (data.get('transaction_id') or '').strip()
 
-    if payment_mode_raw == 'upi' and not transaction_id:
-        flash('Transaction ID is required for online payment.')
-        return redirect(url_for('auth.payment'))
+        cart_items = session.get('cart', [])
+        if not cart_items:
+            return jsonify({'ok': False, 'message': 'Your cart is empty.'}), 400
 
-    buyer_phone = (user.phone or"").strip()
-    if not buyer_phone:
-        flash('Please add your phone number in profile before ordering.')
-        return redirect(url_for('auth.profile'))
+        if payment_mode_raw not in {'upi', 'cash'}:
+            return jsonify({'ok': False, 'message': 'Invalid payment mode.'}), 400
 
-    total_amount = 0
-    order_items = []
-    for item in cart_items:
-       product_id = item.get('id')
-       quantity = int(item.get('qty', 1))
+        if payment_mode_raw == 'upi' and not transaction_id:
+            return jsonify({'ok': False, 'message': 'Transaction ID required for UPI.'}), 400
 
-       product= Product.query.get(product_id)
-       if not product:
-              continue
-       
-       total_amount += quantity * float(product.price)
+        if not user.phone:
+            return jsonify({'ok': False, 'message': 'Add phone number in profile first.'}), 400
 
-       order_items.append(OrderItem(
-           product_id=product.id,
-           quantity=quantity,
-           price=product.price
-       ))
+        # ---- Process Cart ----
+        total_amount = 0
+        order_items = []
 
-    if not order_items:
-        flash('no valid items in cart')
-        return redirect(url_for('auth.cart'))
+        for item in cart_items:
+            product_id = item.get('id')
+            quantity = int(item.get('quantity', 1))  # make sure key is correct
 
-    if payment_mode_raw =='upi':
-        payment_mode="Manual UPI"
-        payment_status="Verification pending"
-    else:
-        payment_mode="pay on delivery"
-        payment_status="Pending"
+            product = Product.query.get(product_id)
+            if not product:
+                continue
 
-        order=Order(
+            total_amount += quantity * float(product.price)
+
+            order_items.append(
+                OrderItem(
+                    product_id=product.id,
+                    quantity=quantity,
+                    price=product.price
+                )
+            )
+
+        if not order_items:
+            return jsonify({'ok': False, 'message': 'No valid items found.'}), 400
+
+        # ---- Create Order ----
+        payment_mode = 'Online Payment' if payment_mode_raw == 'upi' else 'Offline Payment'
+
+        order = Order(
             user_id=user.id,
             total_amount=total_amount,
             payment_mode=payment_mode,
-            payment_status=payment_status,
-            transaction_id=transaction_id if
-            payment_mode_raw == 'upi'else None,
-            order_status="placed"
+            transaction_id=transaction_id if payment_mode_raw == 'upi' else None
+        )
 
-       
-    )
-    db.session.add(order)
-    db.session.flush()  # Ensure order is assigned an ID before adding items
+        db.session.add(order)
+        db.session.flush()  # get order.id before commit
 
-    for oi in order_items:
-        oi.order_id = order.id
-        db.session.add(oi)
+        # ---- Attach Items ----
+        for oi in order_items:
+            oi.order_id = order.id
+            db.session.add(oi)
 
-    db.session.commit()
-    session['cart'] = []
-    session.modified = True
+        db.session.commit()
 
-    return jsonify({
-        'ok': True,
-        'order_id': order.id,
-        'redirect_url': url_for('auth.order_details', order_id=order.id)
-    })
+        # ---- Clear Cart ----
+        session['cart'] = []
+        session.modified = True
+
+        return jsonify({
+            'ok': True,
+            'order_id': order.id,
+            'redirect_url': url_for('auth.order_details', order_id=order.id)
+        })
+
+    except Exception as e:
+        db.session.rollback()
+        print("PLACE ORDER ERROR:", e)
+        return jsonify({'ok': False, 'message': 'Internal server error'}), 500
 
 #buyer route for order details
 @auth.route('/order/<int:order_id>')
