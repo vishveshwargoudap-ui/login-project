@@ -19,8 +19,6 @@ def create_app():
     db.init_app(app)
     from .import models
 
-    return app
-
     from .auth import auth
     app.register_blueprint(auth)
 
