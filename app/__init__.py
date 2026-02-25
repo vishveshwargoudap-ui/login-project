@@ -20,7 +20,7 @@ def create_app():
       # Import models to register them with SQLAlchemy
     from .import models
     #with app.app_context():
-       # db.create_all()
+    db.create_all()
       # Register blueprints
 
     from .auth import auth
