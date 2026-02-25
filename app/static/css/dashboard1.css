@@ -126,24 +126,51 @@ body::after {
 }
 
 .profile-btn {
+    display:flex;
+    gap:8px;
+    padding:10px 20px;
     background: rgba(255, 255, 255, 0.16);
     color: white;
     border-color: rgba(255, 255, 255, 0.25);
+    border:none;
+    border-radius:50px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition:all 0.3s ease;
 }
 
 .profile-btn:hover {
     background: rgba(255, 255, 255, 0.24);
-    
+    transform:translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    background:linear-gradient(135deg, #764ba2, #667eea);
+}
+.profile-btn:active{
+    transform:translateY(0);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
 .cart-btn {
+    position:relative;
+    padding:10px 22px;
     background: #16a34a;
     color: white;
     border-color: #16a34a;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+     box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+    transition:all 0.3s ease;
+    letter-spacing:0.5px;
 }
 
 .cart-btn:hover {
-    background: #15803d;
+    background: #047857;
+    transform:scale(1.05);
+     box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6); 
 }
 
 .logout {
@@ -151,10 +178,24 @@ body::after {
     color: white;
     border-color: #ef4444;
     padding: 9px 16px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.3s ease;
+     box-shadow: 0 4px 15px rgba(220, 37, 37, 0.4);
+     letter-spacing:0.5px;
 }
 
 .logout:hover {
     background: #dc2626;
+    color:white;
+    box-shadow:0 5px 20px rgba(231,76,60,0.4);
+    transform:translateY(-2px);
+
+}
+.logout:active{
+    transform:scale(0.97);
 }
 /* ===== PRODUCTS ===== */
 .products {
