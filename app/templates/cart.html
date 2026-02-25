@@ -59,7 +59,7 @@
                             <!-- Optional remove button -->
                             <form action="{{ url_for('auth.remove_from_cart') }}" method="POST">
                                 <input type="hidden" name="id" value="{{ item.id }}">
-                                <button type="submit">Remove</button>
+                                <button class="remove-btn" type="submit">Remove</button>
                             </form>
                         </td>
                     </tr>
@@ -79,7 +79,7 @@
             <h2>Grand Total: Rs {{ "%.2f"|format(grand_total) }}</h2>
 
             {% if cart_items %}
-             <button type="button" id="checkout-btn">place order</button>
+             <button class="buy-now-btn" type="button" id="checkout-btn">place order</button>
             {% endif %}
         </div>
 
