@@ -89,7 +89,6 @@ h1 {
 
 #cart-table {
     width: 100%;
-    min-width: 650px;
     border-collapse: collapse;
     margin: 0;
 }
@@ -127,12 +126,6 @@ h1 {
 #cart-table tbody tr:last-child td {
     border-bottom: none;
 }
-.cart-table th,
-.cart-table td{
-    white-space:nowrap;
-    word-break:break-word;
-}
-
 #cart-table tbody td[colspan] {
     font-weight: 500;
     color: var(--ink-700);
@@ -237,8 +230,14 @@ h1 {
 
     #cart-table th,
     #cart-table td {
-        padding: 12px 8px;
-        font-size: 0.88rem;
+        padding: 5px 8px;
+        font-size: 0.75rem;
+        word-break: break-word;
+    }
+
+    #cart-table img {
+        width: 50px;
+        height: 50px;
     }
 
     .cart-summary {
