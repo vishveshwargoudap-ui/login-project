@@ -25,7 +25,6 @@ body {
         linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
     min-height: 100vh;
     color: var(--ink-900);
-    overflow-x:hidden;
 }
 
 .cart-page {
