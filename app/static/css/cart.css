@@ -25,6 +25,7 @@ body {
         linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
     min-height: 100vh;
     color: var(--ink-900);
+    overflow-x:hidden;
 }
 
 .cart-page {
@@ -82,12 +83,14 @@ h1 {
     border-radius: 16px;
     box-shadow: 0 16px 35px rgba(15, 23, 42, 0.12);
     width: 100%;
+    max-width:100%;
     overflow-x: auto;
+    padding:0 10px;
 }
 
 #cart-table {
     width: 100%;
-    min-width: 600px;
+    min-width: 650px;
     border-collapse: collapse;
     margin: 0;
 }
@@ -124,6 +127,11 @@ h1 {
 
 #cart-table tbody tr:last-child td {
     border-bottom: none;
+}
+.cart-table th,
+.cart-table td{
+    white-space:nowrap;
+    word-break:break-word;
 }
 
 #cart-table tbody td[colspan] {
