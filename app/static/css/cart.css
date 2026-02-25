@@ -23,7 +23,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 8pxpx;
     margin-bottom: 22px;
 }
 
@@ -62,11 +62,15 @@ h1 {
     border: 1px solid rgba(148, 163, 184, 0.2);
     border-radius: 16px;
     box-shadow: 0 16px 35px rgba(15, 23, 42, 0.12);
+    width:100%;
+    overflow-x:auto;
 }
 
 #cart-table {
     width: 100%;
+    min-width:600px;
     border-collapse: collapse;
+    margin: 0;
 }
 
 #cart-table thead {
