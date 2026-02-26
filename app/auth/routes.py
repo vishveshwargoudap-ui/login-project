@@ -291,6 +291,23 @@ def place_order():
         db.session.rollback()
         print("PLACE ORDER ERROR:", e)
         return jsonify({'ok': False, 'message': 'Internal server error'}), 500
+    
+    
+@auth.route('/payment/<int:order_id>')
+@login_required
+def payment(order_id):
+        if 'email' not in session:
+            return redirect(url_for('auth.login'))
+
+        user = User.query.filter_by(email=session['email']).first()
+        if not user:
+            return redirect(url_for('auth.login'))
+
+        order = Order.query.get_or_404(order_id)
+        if order.user_id != user.id:
+            return redirect(url_for('auth.dashboard'))
+
+        return render_template('payment.html', user=user, order=order)
 
 #buyer route for order details
 @auth.route('/order/<int:order_id>')
