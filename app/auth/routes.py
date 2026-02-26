@@ -310,7 +310,7 @@ def confirm_payment(order_id):
     db.session.commit()
 
     flash("Payment details updated successfully.", "success")
-    return redirect(url_for('auth.dashboard', order_id=order_id))
+    return redirect(url_for('auth.order_details', order_id=order.id))
     
     
 @auth.route('/payment/<int:order_id>')
