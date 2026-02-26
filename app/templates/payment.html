@@ -18,10 +18,6 @@
 
         <section class="payment-grid">
             <form action="{{ url_for('auth.place_order')}}"method="POST" id="paymentForm" class="payment-card">
-                <div class="method-details">
-                    <label for="phone">Phone Number</label>
-                    <input id="phone" type="text" placeholder="Enter phone number" value="{{ user.phone or '' }}">
-                </div>
 
                 <label class="method-card">
                     <input type="radio" name="method" value="upi" checked>
@@ -44,8 +40,11 @@
                         <p>Confirm order now and pay cash at pickup.</p>
                     </div>
                 </label>
-
+                  {if manualupidetails}
                <button type="submit" class="confirm-btn">pay now</button>
+                  {else}
+                <button type="submit" class="confirm-btn" id="pay-btn">Confirm Order</button>
+                    {/if}
             </form>
 
             <aside class="summary-card">
