@@ -355,17 +355,39 @@ def order_details(order_id):
 @auth.route('/seller/payments')
 @login_required
 def seller_payments():
+
     if 'email' not in session:
         return redirect(url_for('auth.login'))
 
-    user = User.query.filter_by(email=session['email']).first()
-    if not can_manage_products(user):
+    seller = User.query.filter_by(email=session['email']).first()
+
+    if not can_manage_products(seller):
         return redirect(url_for('auth.dashboard'))
 
-    orders = Order.query.filter_by(user_id=user.id).all()
+    # Get seller's products
+    seller_products = Product.query.filter_by(seller_id=seller.id).all()
+    product_ids = [p.id for p in seller_products]
+
+    if not product_ids:
+        return render_template(
+            'order.html',
+            user=seller,
+            orders=[],
+            is_seller_view=True
+        )
+
+    # Get order items for seller products
+    order_items = OrderItem.query.filter(
+        OrderItem.product_id.in_(product_ids)
+    ).all()
+
+    # Get related orders
+    order_ids = list(set([item.order_id for item in order_items]))
+    orders = Order.query.filter(Order.id.in_(order_ids)).all()
+
     return render_template(
         'order.html',
-        user=user,
+        user=seller,
         orders=orders,
         is_seller_view=True
     )
