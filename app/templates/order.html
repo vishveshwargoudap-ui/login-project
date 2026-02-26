@@ -81,7 +81,7 @@
                 <h3>Ordered Items</h3>
                 <ul>
                     {% for item in order.items %}
-                        <li>{{ item.product_name }} - Qty {{ item.quantity }} - Rs {{ '%.2f'|format(item.order.price * item.quantity) }}</li>
+                        <li>{{ item.product_name }} - Qty {{ item.quantity }} - Rs {{ '%.2f'|format(item.product.price * item.quantity) }}</li>
                     {% endfor %}
                 </ul>
                 <p class="total"><strong>Total:</strong> Rs {{ '%.2f'|format(order.total_amount) }}</p>
