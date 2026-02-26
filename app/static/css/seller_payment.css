@@ -1,0 +1,156 @@
+:root {
+    --bg-1: #f2f7ff;
+    --bg-2: #e5efff;
+    --card: #ffffff;
+    --text: #122136;
+    --muted: #5f6d80;
+    --line: #d7e2f1;
+    --primary: #1f6ed4;
+    --primary-soft: #e8f1ff;
+    --success: #1d8f5a;
+    --pending: #a26700;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    min-height: 100vh;
+}
+
+.payments-page {
+    width: min(1000px, 92vw);
+    margin: 42px auto;
+}
+
+.payments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.payments-header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.payments-header p {
+    margin: 8px 0 0;
+    color: var(--muted);
+}
+
+.back-link {
+    text-decoration: none;
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    filter: brightness(1.05);
+}
+
+.payments-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(18, 33, 54, 0.08);
+    overflow: hidden;
+}
+
+.payments-table-wrap {
+    overflow-x: auto;
+}
+
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 620px;
+}
+
+.payments-table th,
+.payments-table td {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.payments-table th {
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--primary-soft);
+}
+
+.payments-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.status-pill {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    background: #eef2f8;
+    color: var(--text);
+}
+
+.status-pill.paid,
+.status-pill.success {
+    background: #e8f8f1;
+    color: var(--success);
+}
+
+.status-pill.pending {
+    background: #fff4df;
+    color: var(--pending);
+}
+
+.delete-btn {
+    border: 1px solid #d64a4a;
+    background: #fff1f1;
+    color: #a22020;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: #ffdede;
+}
+
+.empty-state {
+    margin: 0;
+    text-align: center;
+    padding: 36px 16px;
+    color: var(--muted);
+    font-size: 1.02rem;
+}
+
+@media (max-width: 700px) {
+    .payments-page {
+        margin: 24px auto;
+    }
+
+    .payments-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .back-link {
+        text-align: center;
+    }
+}

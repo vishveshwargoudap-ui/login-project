@@ -370,10 +370,9 @@ def seller_payments():
 
     if not product_ids:
         return render_template(
-            'order.html',
+            'seller_payment.html',
             user=seller,
-            orders=[],
-            is_seller_view=True
+            orders=[]
         )
 
     # Get order items for seller products
@@ -386,10 +385,9 @@ def seller_payments():
     orders = Order.query.filter(Order.id.in_(order_ids)).all()
 
     return render_template(
-        'order.html',
+        'seller_payment.html',
         user=seller,
         orders=orders,
-        is_seller_view=True
     )
 
 #seller route for adding proucts and removing products in cloudinary and data base
@@ -457,4 +455,5 @@ def remove_payment(order_id):
     db.session.commit()
 
     return redirect(url_for('auth.seller_payments'))
+
 
