@@ -87,16 +87,6 @@
 
 </div>
 <script src="{{url_for('static',filename='js/cart.js')}}"></script>
-document.addEventListener("DOMContentLoaded", function() {
-    const btn= document.getElementById("placeOrderBtn");
-
-    if(btn){
-        btn.addEventListener("click", function() {
-            window.location.href = "{{ url_for('auth.payment') }}";
-        });
-    }else{
-        console.error("Place Order button not found");
-    }
 
 </body>
 </html>
