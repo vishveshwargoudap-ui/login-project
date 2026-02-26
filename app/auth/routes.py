@@ -341,7 +341,7 @@ def order_details(order_id):
         return redirect(url_for('auth.login'))
 
     order = Order.query.get_or_404(order_id)
-    if user.role != 'seller' and order.user_id != user.id:
+    if order.user_id != user.id:
         return redirect(url_for('auth.dashboard'))
 
     return render_template(
