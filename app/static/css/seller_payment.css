@@ -74,7 +74,7 @@ body {
 .payments-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 620px;
+    min-width: 900px;
 }
 
 .payments-table th,

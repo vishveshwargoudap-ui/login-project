@@ -46,6 +46,7 @@ class Order(db.Model):
     payment_status=db.Column(db.String(50),default="pending")
     transaction_id=db.Column(db.String(200))
     order_status=db.Column(db.String(50),default="pending")
+    user=db.relationship("User", backref="orders")
 
     items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
 

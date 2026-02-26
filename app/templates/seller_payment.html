@@ -23,6 +23,8 @@
                         <thead>
                             <tr>
                                 <th scope="col">Order ID</th>
+                                <th scope="col">Buyer Name</th>
+                                <th scope="col">Phone</th>
                                 <th scope="col">Total (Rs)</th>
                                 <th scope="col">Payment Mode</th>
                                 <th scope="col">Status</th>
@@ -33,6 +35,8 @@
                             {% for order in orders %}
                                 <tr>
                                     <td>#{{ order.id }}</td>
+                                    <td>{{ buyers_by_id.get(order.user_id).name if buyers_by_id.get(order.user_id) else '-' }}</td>
+                                    <td>{{ buyers_by_id.get(order.user_id).phone if buyers_by_id.get(order.user_id) and buyers_by_id.get(order.user_id).phone else '-' }}</td>
                                     <td>Rs {{ '%.2f'|format(order.total_amount or 0) }}</td>
                                     <td>{{ order.payment_mode or '-' }}</td>
                                     <td>

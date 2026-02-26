@@ -372,7 +372,8 @@ def seller_payments():
         return render_template(
             'seller_payment.html',
             user=seller,
-            orders=[]
+            orders=[],
+            buyers_by_id={}
         )
 
     # Get order items for seller products
@@ -383,11 +384,15 @@ def seller_payments():
     # Get related orders
     order_ids = list(set([item.order_id for item in order_items]))
     orders = Order.query.filter(Order.id.in_(order_ids)).all()
+    buyer_ids = list(set([order.user_id for order in orders]))
+    buyers = User.query.filter(User.id.in_(buyer_ids)).all() if buyer_ids else []
+    buyers_by_id = {buyer.id: buyer for buyer in buyers}
 
     return render_template(
         'seller_payment.html',
         user=seller,
         orders=orders,
+        buyers_by_id=buyers_by_id,
     )
 
 #seller route for adding proucts and removing products in cloudinary and data base
