@@ -27,7 +27,7 @@
                                 <th scope="col">Phone</th>
                                 <th scope="col">Total (Rs)</th>
                                 <th scope="col">Payment Mode</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Product Name</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -40,9 +40,7 @@
                                     <td>Rs {{ '%.2f'|format(order.total_amount or 0) }}</td>
                                     <td>{{ order.payment_mode or '-' }}</td>
                                     <td>
-                                        <span class="status-pill {{ (order.payment_status or 'pending')|lower }}">
-                                            {{ order.payment_status or 'Pending' }}
-                                        </span>
+                                        {{ ', '.join(order_products.get(order.id, [])) if order_products.get(order.id) else '-' }}
                                     </td>
                                     <td>
                                         <form action="{{ url_for('auth.remove_payment', order_id=order.id) }}" method="POST" onsubmit="return confirm('Delete this payment record?');">

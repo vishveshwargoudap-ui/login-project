@@ -380,6 +380,12 @@ def seller_payments():
     order_items = OrderItem.query.filter(
         OrderItem.product_id.in_(product_ids)
     ).all()
+    order_products = {}
+    for item in order_items:
+        if not item.product:
+            continue
+        order_products.setdefault(item.order_id, [])
+        order_products[item.order_id].append(f"{item.product.name} x{item.quantity}")
 
     # Get related orders
     order_ids = list(set([item.order_id for item in order_items]))
@@ -393,6 +399,7 @@ def seller_payments():
         user=seller,
         orders=orders,
         buyers_by_id=buyers_by_id,
+        order_products=order_products,
     )
 
 #seller route for adding proucts and removing products in cloudinary and data base
