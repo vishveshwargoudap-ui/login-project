@@ -43,9 +43,16 @@ function placeOrder() {
     .then(res => res.json())
     .then(data => {
         console.log(data);
+
+        if (data.ok) {
+            window.location.href = data.redirect_url;
+        }else {
+            alert(data.message);
+        }
     })
     .catch(err => {
         console.error(err);
+        alert("Error placing order");
     });
 }
 
