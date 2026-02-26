@@ -51,95 +51,35 @@
             </aside>
         </section>
     </main>
+      <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-    <script>
-        const payBtn = document.getElementById("pay-btn");
-        const phoneInput = document.getElementById("phone");
-        const utrInput = document.getElementById("utr");
-        const manualUpiDetails = document.getElementById("manualUpiDetails");
+    const payBtn = document.getElementById("pay-btn");
+    const utrInput = document.getElementById("utr");
+    const manualUpiDetails = document.getElementById("manualUpiDetails");
 
-        function updateButtonText(){
-            const selected=document.querySelected('input[name="method"]):checked')?.value;
-
-            if(selected==="upi"){
-                payBtn.textContent="Pay Now";
-            }else {
-                payBtn.textContent="confirm Order";
-            }
-        }
-        methodRadios.forEach(radio => {radio.addEventListener("change",updateButtonText)});
-
-        updateButtonText();
-
-        function getSelectedMethod() {
-            return document.querySelector('input[name="method"]:checked')?.value || "upi";
-        }
-
-        function updateMethodView() {
-            const method = getSelectedMethod();
-            if (method === "upi") {
-                manualUpiDetails.classList.remove("hidden");
-            } else {
-                manualUpiDetails.classList.add("hidden");
-            }
-        }
-
-        document.querySelectorAll('input[name="method"]').forEach((input) => {
-            input.addEventListener("change", updateMethodView);
-        });
-
-        
-    if (payBtn) {
-        payBtn.addEventListener("click", async (event) => {
-            event.preventDefault();
-
-            if (!phoneInput.value.trim()) {
-                alert("Please enter your phone number");
-                phoneInput.focus();
-                return;
-            }
-
-            if (!cartItems.length) {
-                alert("Your cart is empty. Please add products first.");
-                window.location.href = "{{ url_for('auth.cart') }}";
-                return;
-            }
-
-            const method = getSelectedMethod();
-
-            if (method === "upi" && !utrInput.value.trim()) {
-                alert("Please enter UTR / Transaction ID for manual UPI payment.");
-                utrInput.focus();
-                return;
-            }
-
-            try {
-                const placeOrderResponse = await fetch("{{ url_for('auth.place_order') }}", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        items: cartItems,
-                        payment_mode: method,
-                        transaction_id: method === "upi" ? utrInput.value.trim() : "",
-                        phone: phoneInput.value.trim()
-                    })
-                });
-
-                const placeOrderData = await placeOrderResponse.json();
-                if (!placeOrderResponse.ok || !placeOrderData.ok || !placeOrderData.redirect_url) {
-                    alert(placeOrderData.message || "Failed to place order.");
-                    return;
-                }
-
-                localStorage.removeItem("cartItems");
-                window.location.href = placeOrderData.redirect_url;
-            } catch (error) {
-                alert("Unable to place order right now. Please try again.");
-            }
-        });
+    function getSelectedMethod() {
+        return document.querySelector('input[name="method"]:checked')?.value;
     }
 
-        updateMethodView();
-    </script>
+    function updateMethodView() {
+        const method = getSelectedMethod();
+
+        if (method === "upi") {
+            manualUpiDetails.classList.remove("hidden");
+            payBtn.textContent = "Pay Now";
+        } else {
+            manualUpiDetails.classList.add("hidden");
+            payBtn.textContent = "Confirm Order";
+        }
+    }
+
+    document.querySelectorAll('input[name="method"]').forEach((input) => {
+        input.addEventListener("change", updateMethodView);
+    });
+
+    updateMethodView();
+});
+</script>
 </body>
 </html>
