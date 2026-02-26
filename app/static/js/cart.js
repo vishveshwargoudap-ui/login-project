@@ -28,6 +28,8 @@ function addToCart(button) {
     });
 }
 
+console.log("cart.js loaded");
+
 function placeOrder() {
     console.log("Place order clicked");
 
@@ -36,21 +38,22 @@ function placeOrder() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            payment_mode: "cash"
-        })
+        body: JSON.stringify({ payment_mode: "cash" })
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         console.log(data);
-        if (data.ok) {
-            window.location.href = data.redirect_url;
-        } else {
-            alert(data.message);
-        }
     })
-    .catch(error => {
-        console.error(error);
-        alert("Error placing order");
+    .catch(err => {
+        console.error(err);
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("placeOrderBtn");
+    console.log("Button:", btn);
+
+    if (btn) {
+        btn.addEventListener("click", placeOrder);
+    }
+});
