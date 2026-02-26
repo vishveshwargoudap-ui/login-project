@@ -17,7 +17,7 @@
         </header>
 
         <section class="payment-grid">
-            <form action="{{ url_for('auth.place_order')}}"method="POST" id="paymentForm" class="payment-card">
+            <form action="{{ url_for('auth.confirm_payment',order_id=order.id)}}"method="POST" id="paymentForm" class="payment-card">
 
                 <label class="method-card">
                     <input type="radio" name="method" value="upi" checked>
