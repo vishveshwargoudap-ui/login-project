@@ -54,7 +54,7 @@
       <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const payBtn = document.getElementById("pay-btn");
+    const payBtn = document.getElementById("paybtn");
     const utrInput = document.getElementById("utr");
     const manualUpiDetails = document.getElementById("manualUpiDetails");
 
@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateMethodView() {
         const method = getSelectedMethod();
+
+        if (!payBtn) return;
 
         if (method === "upi") {
             manualUpiDetails.classList.remove("hidden");
