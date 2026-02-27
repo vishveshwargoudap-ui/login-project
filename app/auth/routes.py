@@ -121,9 +121,23 @@ def cart():
         return redirect(url_for('auth.login'))
     if user.role == 'seller':
         return redirect(url_for('auth.seller_dashboard'))
-    
-    cart_items =session.get('cart',[])
-    grand_total = sum(item['price']*item['qty']for item in cart_items)
+
+    cart = session.get('cart', {})
+
+    cart_items = []
+    grand_total = 0
+
+    for product_id, item in cart.items():
+        item_total = item['price'] * item['qty']
+        grand_total += item_total
+
+        cart_items.append({
+            "product_id": product_id,
+            "name": item['name'],
+            "price": item['price'],
+            "image": item['image'],
+            "qty": item['qty']
+        })
 
     return render_template('cart.html', user=user, cart_items=cart_items, grand_total=grand_total)
        
@@ -462,33 +476,6 @@ def update_cart_quantity():
         session.modified = True
 
     return redirect(url_for('auth.cart'))
-            
-@auth.route('/add-to-cart/<int:product_id>')
-@login_required
-def add_to_cart_item(product_id):
-
-    product = Product.query.get_or_404(product_id)
-
-    cart = session.get('cart', {})
-    print("session cart",session.get('cart'))
-
-    product_id = str(product_id)   # 🔥 IMPORTANT
-
-    if product_id in cart:
-        cart[product_id]['qty'] += 1
-    else:
-        cart[product_id] = {
-            'name': product.name,
-            'price': product.price,
-            'image': product.image,
-            'qty': 1
-        }
-
-    session['cart'] = cart
-    session.modified = True
-
-    return redirect(url_for('auth.cart'))
-
 
 #seller route for removing products
 @auth.route('/remove_product/<int:product_id>', methods=['POST'])
