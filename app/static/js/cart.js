@@ -96,3 +96,19 @@ document.addEventListener("DOMContentLoaded",function(){
        });
     });
 });
+
+function removeFromCart(id) {
+    fetch("/remove_from_cart", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `id=${id}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
