@@ -440,6 +440,30 @@ def add_product():
 
     return render_template('add_product.html')
 
+@auth.route('/update-cart-quantity', method=['POST'])
+@login_required
+def update_cart_quantity():
+
+    item_id = request.form.get("item_id")
+    action = request.form.get("action")
+
+    cart = session.get('cart',{})
+
+    if item_id in cart:
+        if action == "increase":
+            cart[item_id]['qty'] +=1
+        elif action == "decrease":
+            if cart[item_id]['qty']>1:
+                cart[item_id]['qty']-= 1
+            else:
+                 del cart[item_id]
+
+                 session['cart'] = cart
+                 session.modified = True
+
+                 return redirect(url_for('auth.cart'))
+
+
 #seller route for removing products
 @auth.route('/remove_product/<int:product_id>', methods=['POST'])
 @login_required
