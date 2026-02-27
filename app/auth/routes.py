@@ -140,12 +140,6 @@ def cart():
         })
 
     return render_template('cart.html', user=user, cart_items=cart_items, grand_total=grand_total)
-
-@auth.route('/clear-cart')
-def clear_cart():
-    session.pop('cart',None)
-    session.modified=True
-    return "cart cleared"
        
 #buyer route for payments
 #removed payments from here (due to confusion for seller and buyer payments) and added in place-order route
