@@ -298,14 +298,16 @@ def confirm_payment(order_id):
     order= Order.query.get_or_404(order_id)
 
     method=request.form.get("method")
-    transcation_id=request.form.get("utr")
+    transaction_id=request.form.get("transaction_id")
 
-    if method == "upi" and not transcation_id:
+    order.payment_mode="Online Payment" if method=="upi" else "Offline Payment"
+
+    if method == "upi" and not transaction_id:
         flash("Transaction ID is required for UPI payments.", "error")
         return redirect(url_for('auth.payment', order_id=order_id))
     
     order.payment_mode = "Online Payment" if method == "upi" else "Offline Payment"
-    order.transaction_id = transcation_id if method == "upi" else None
+    order.transaction_id = transaction_id if method == "upi" else None
 
     db.session.commit()
 
