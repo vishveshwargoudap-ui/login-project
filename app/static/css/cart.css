@@ -83,8 +83,13 @@ h1 {
     box-shadow: 0 16px 35px rgba(15, 23, 42, 0.12);
     width: 100%;
     max-width:100%;
-    overflow-x: auto;
+    overflow-x: hidden;
     padding:0 10px;
+}
+
+.cart-table-wrap {
+    width: 100%;
+    overflow-x: hidden;
 }
 
 #cart-table {
@@ -231,22 +236,71 @@ h1 {
         font-size: 1.6rem;
     }
 
-    #cart-table th,
+    .cart-panel {
+        overflow-x: hidden;
+    }
+
+    #cart-table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    #cart-table thead {
+        display: none;
+    }
+
+    #cart-table,
+    #cart-table tbody,
+    #cart-table tr,
     #cart-table td {
-        padding: 10px 6px;
-        font-size: 0.75rem;
+        display: block;
+        width: 100%;
+    }
+
+    #cart-table tr {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        margin-bottom: 12px;
+        padding: 8px 10px;
+        background: #fff;
+    }
+
+    #cart-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        border: 0;
+        font-size: 0.86rem;
+        text-align: left;
         word-break: break-word;
-        white-space:nowrap;
+    }
+
+    #cart-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--ink-700);
+        flex: 0 0 92px;
+    }
+
+    #cart-table td[colspan] {
+        justify-content: center;
+    }
+
+    #cart-table td[colspan]::before {
+        content: none;
     }
 
     #cart-table img {
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
     }
 
     .cart-summary {
         flex-direction: column;
         align-items: stretch;
+        width: 100%;
     }
 
     .cart-summary h2 {
@@ -257,7 +311,8 @@ h1 {
         text-align: center;
         width: 100%;
     }
-    #cart-table td:nth-child(2){
-        white-space:normal;
+
+    #cart-table td form {
+        margin: 0;
     }
 }

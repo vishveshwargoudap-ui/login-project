@@ -6,24 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
-    <style>
-        .cart-table-wrap {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        @media (max-width: 760px) {
-            .cart-page,
-            .cart-panel {
-                overflow-x: hidden;
-            }
-
-            #cart-table {
-                min-width: 640px;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -59,15 +41,15 @@
                     {% if cart_items %}
                         {% for item in cart_items %}
                         <tr>
-                            <td>
+                            <td data-label="Product">
                                 <img src="{{item.image}}" width="60">
                             </td>
 
-                            <td>{{ item.name }}</td>
+                            <td data-label="Name">{{ item.name }}</td>
 
-                            <td>Rs {{ "%.2f"|format(item.price) }}</td>
+                            <td data-label="Price">Rs {{ "%.2f"|format(item.price) }}</td>
 
-                            <td>
+                            <td data-label="Qty">
                                 <form action="{{url_for('auth.update_cart_quantity')}}" method="POST" style="display:inline">
                                     <input type="hidden" name="item_id" value="{{item.product_id}}">
                                     <input type="hidden" name="action" value="decrease">
@@ -85,11 +67,11 @@
                                 </form>
                             </td>
 
-                            <td>
+                            <td data-label="Total">
                                 Rs {{ "%.2f"|format(item.price * item.qty) }}
                             </td>
 
-                            <td>
+                            <td data-label="Action">
                                 <!-- Optional remove button -->
                                 <form action="{{ url_for('auth.remove_from_cart') }}" method="POST">
                                     <input type="hidden" name="id" value="{{ item.id }}">
