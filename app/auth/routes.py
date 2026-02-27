@@ -463,7 +463,7 @@ def update_cart_quantity():
 
     return redirect(url_for('auth.cart'))
             
-@auth.route('/add_to_cart/<int:product_id>')
+@auth.route('/add-to-cart/<int:product_id>')
 @login_required
 def add_to_cart_item(product_id):
 
@@ -485,6 +485,8 @@ def add_to_cart_item(product_id):
 
     session['cart'] = cart
     session.modified = True
+
+    print("session cart",session.get('cart'))
 
     return redirect(url_for('auth.cart'))
 
