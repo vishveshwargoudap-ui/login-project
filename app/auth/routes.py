@@ -440,7 +440,7 @@ def add_product():
 
     return render_template('add_product.html')
 
-@auth.route('/update-cart-quantity', method=['POST'])
+@auth.route('/update-cart-quantity', methods=['POST'])
 @login_required
 def update_cart_quantity():
 
