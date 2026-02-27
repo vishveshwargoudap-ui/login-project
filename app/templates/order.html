@@ -75,7 +75,7 @@
             </section>
         {% else %}
             <section class="card">
-                <p><strong>Phone Number:</strong> {{ order.phone }}</p>
+                <p><strong>Phone Number:</strong> {{ user.phone }}</p>
                 <p><strong>Payment Mode:</strong> {{ order.payment_mode }}</p>
                 <p><strong>Transaction ID:</strong> {{ order.transaction_id or '-' }}</p>
                 <h3>Ordered Items</h3>
