@@ -458,10 +458,10 @@ def update_cart_quantity():
             else:
                  del cart[item_id]
 
-                 session['cart'] = cart
-                 session.modified = True
+        session['cart'] = cart
+        session.modified = True
 
-                 return redirect(url_for('auth.cart'))
+    return redirect(url_for('auth.cart'))
             
 @auth.route('/add-to-cart/<int:product_id>')
 @login_required
