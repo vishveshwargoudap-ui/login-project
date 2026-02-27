@@ -465,7 +465,7 @@ def update_cart_quantity():
             
 @auth.route('/add-to-cart/<int:product_id>')
 @login_required
-def add_to_cart(product_id):
+def add_to_cart_item(product_id):
 
     product = Product.query.get_or_404(product_id)
 
