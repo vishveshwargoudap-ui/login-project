@@ -119,27 +119,33 @@ def cart():
     user = User.query.filter_by(email=session['email']).first()
     if not user:
         return redirect(url_for('auth.login'))
+
     if user.role == 'seller':
         return redirect(url_for('auth.seller_dashboard'))
 
-    cart = session.get('cart', {})
+    cart = session.get('cart', [])
 
     cart_items = []
     grand_total = 0
 
-    for product_id, item in cart.items():
-        item_total = item['price'] * item['qty']
+    for item in cart:
+        item_total = float(item['price']) * int(item.get('qty', 1))
         grand_total += item_total
 
         cart_items.append({
-            "product_id": product_id,
+            "product_id": item['id'],
             "name": item['name'],
             "price": item['price'],
             "image": item['image'],
-            "qty": item['qty']
+            "qty": item.get('qty', 1)
         })
 
-    return render_template('cart.html', user=user, cart_items=cart_items, grand_total=grand_total)
+    return render_template(
+        'cart.html',
+        user=user,
+        cart_items=cart_items,
+        grand_total=grand_total
+    )
        
 #buyer route for payments
 #removed payments from here (due to confusion for seller and buyer payments) and added in place-order route
@@ -461,22 +467,23 @@ def update_cart_quantity():
     item_id = request.form.get("item_id")
     action = request.form.get("action")
 
-    cart = session.get('cart',{})
+    cart = session.get('cart', [])
 
-    if item_id in cart:
-        if action == "increase":
-            cart[item_id]['qty'] +=1
-        elif action == "decrease":
-            if cart[item_id]['qty']>1:
-                cart[item_id]['qty']-= 1
-            else:
-                 del cart[item_id]
+    for item in cart:
+        if str(item.get("id")) == str(item_id):
+            if action == "increase":
+                item['qty'] += 1
+            elif action == "decrease":
+                if item['qty'] > 1:
+                    item['qty'] -= 1
+                else:
+                    cart.remove(item)
+            break
 
-        session['cart'] = cart
-        session.modified = True
+    session['cart'] = cart
+    session.modified = True
 
     return redirect(url_for('auth.cart'))
-
 #seller route for removing products
 @auth.route('/remove_product/<int:product_id>', methods=['POST'])
 @login_required
