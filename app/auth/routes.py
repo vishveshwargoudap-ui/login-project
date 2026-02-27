@@ -310,9 +310,12 @@ def confirm_payment(order_id):
     order.transaction_id = transaction_id if method == "upi" else None
 
     db.session.commit()
+    print("METHOD",method)
+    print("TRANSATION",transaction_id)
 
     flash("Payment details updated successfully.", "success")
     return redirect(url_for('auth.order_details', order_id=order.id))
+
     
     
 @auth.route('/payment/<int:order_id>')
