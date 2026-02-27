@@ -444,7 +444,7 @@ def add_product():
 @login_required
 def update_cart_quantity():
 
-    item_id = str(request.form.get("item_id"))
+    item_id = request.form.get("item_id")
     action = request.form.get("action")
 
     cart = session.get('cart',{})
@@ -463,7 +463,7 @@ def update_cart_quantity():
 
     return redirect(url_for('auth.cart'))
             
-@auth.route('/add-to-cart/<int:product_id>')
+@auth.route('/add_to_cart/<int:product_id>')
 @login_required
 def add_to_cart_item(product_id):
 
