@@ -470,6 +470,7 @@ def add_to_cart_item(product_id):
     product = Product.query.get_or_404(product_id)
 
     cart = session.get('cart', {})
+    print("session cart",session.get('cart'))
 
     product_id = str(product_id)   # 🔥 IMPORTANT
 
@@ -485,8 +486,6 @@ def add_to_cart_item(product_id):
 
     session['cart'] = cart
     session.modified = True
-
-    print("session cart",session.get('cart'))
 
     return redirect(url_for('auth.cart'))
 
