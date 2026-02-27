@@ -444,7 +444,7 @@ def add_product():
 @login_required
 def update_cart_quantity():
 
-    item_id = request.form.get("item_id")
+    item_id = str(request.form.get("item_id"))
     action = request.form.get("action")
 
     cart = session.get('cart',{})
