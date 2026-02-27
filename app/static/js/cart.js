@@ -64,3 +64,35 @@ document.addEventListener("DOMContentLoaded", function () {
         btn.addEventListener("click", placeOrder);
     }
 });
+
+document.addEventListener("DOMContentLoaded",function(){
+    const qtyButton=document.querySelectorAll(".qty-btn");
+
+    qtyButton.forEach(btn=>{btn.addEventListener("click",function(){
+        const productld=this.dataset.id;
+        const action=this.dataset.action;
+
+        fetch("/update-cart",{
+            method:"POST",
+            headers:{"content-Type":"application/json"},
+            body:JSON.stringify({
+                product_id:productld,
+                action:action
+            })
+
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.ok){
+                location.reload();
+            }else{
+                alert("Error updating cart");
+            }
+        })
+        .catch(err =>{
+            console.error(err);
+            alert("error updation cart");
+        });
+       });
+    });
+});
