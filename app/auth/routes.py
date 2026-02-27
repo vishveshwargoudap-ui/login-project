@@ -258,7 +258,7 @@ def place_order():
 
         for item in cart_items:
             product_id = item.get('id')
-            quantity = int(item.get('quantity', 1))  # make sure key is correct
+            quantity = int(item.get('qty', 1))  # make sure key is correct
 
             product = Product.query.get(product_id)
             if not product:
