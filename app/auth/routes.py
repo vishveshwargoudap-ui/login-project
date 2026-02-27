@@ -462,6 +462,31 @@ def update_cart_quantity():
                  session.modified = True
 
                  return redirect(url_for('auth.cart'))
+            
+@auth.route('/add-to-cart/<int:product_id>')
+@login_required
+def add_to_cart(product_id):
+
+    product = Product.query.get_or_404(product_id)
+
+    cart = session.get('cart', {})
+
+    product_id = str(product_id)   # 🔥 IMPORTANT
+
+    if product_id in cart:
+        cart[product_id]['qty'] += 1
+    else:
+        cart[product_id] = {
+            'name': product.name,
+            'price': product.price,
+            'image': product.image,
+            'qty': 1
+        }
+
+    session['cart'] = cart
+    session.modified = True
+
+    return redirect(url_for('auth.cart'))
 
 
 #seller route for removing products
