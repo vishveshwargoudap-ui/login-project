@@ -96,6 +96,11 @@ document.addEventListener("DOMContentLoaded",function(){
        });
     });
 });
+document.addEventListener("DOMContentLoaded",
+function(){
+     console.log("cart.js loaded");
+});
+
 
 function removeFromCart(id) {
     fetch("/remove_from_cart", {
