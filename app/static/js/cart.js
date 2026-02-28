@@ -96,12 +96,6 @@ document.addEventListener("DOMContentLoaded",function(){
        });
     });
 });
-document.addEventListener("DOMContentLoaded",
-function(){
-     console.log("cart.js loaded");
-});
-
-
 window.removeFromCart = function(id) {
     fetch("/remove_from_cart", {
         method: "POST",
