@@ -102,7 +102,7 @@ function(){
 });
 
 
-function removeFromCart(id) {
+window.removeFromCart = function(id) {
     fetch("/remove_from_cart", {
         method: "POST",
         headers: {
@@ -116,5 +116,5 @@ function removeFromCart(id) {
             location.reload();
         }
     })
-    .catch(err => console.error(err))
-}
+    .catch(err => console.error(err));
+};
