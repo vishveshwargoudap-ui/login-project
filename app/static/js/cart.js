@@ -96,19 +96,3 @@ document.addEventListener("DOMContentLoaded",function(){
        });
     });
 });
-window.removeFromCart = function(id) {
-    fetch("/remove_from_cart", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `id=${id}`
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        }
-    })
-    .catch(err => console.error(err));
-};

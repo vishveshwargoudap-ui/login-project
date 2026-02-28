@@ -75,7 +75,7 @@
                                 <!-- Optional remove button -->
                                 <form action="{{ url_for('auth.remove_from_cart') }}" method="POST">
                                     <input type="hidden" name="id" value="{{ item.id }}">
-                                    <button class="remove-btn" type="button" onclick="removeFromCart('{{item.id}}')">Remove</button>
+                                    <button class="remove-btn" type="submit">Remove</button>
                                 </form>
                             </td>
                         </tr>
