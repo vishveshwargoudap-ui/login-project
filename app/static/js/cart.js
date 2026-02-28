@@ -105,10 +105,11 @@ function removeFromCart(id) {
         },
         body: `id=${id}`
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         if (data.success) {
             location.reload();
         }
-    });
+    })
+    .catch(err => console.error(err))
 }
