@@ -212,7 +212,7 @@ def remove_from_cart():
     session['cart'] = cart
     session.modified = True
 
-    return jsonify({"success":True})
+    return redirect(url_for('auth.cart'))
 
 
 #buyer route for placing order
