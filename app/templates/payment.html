@@ -45,7 +45,7 @@
 
             <aside class="summary-card">
                 <h3>Order Summary</h3>
-               <p>Items:{{order.items|length}}</p>
+               <p>Items:{{order.items|length|item.quantity }}</p>
                <p>Total: Rs{{"%.2f"|format(order.total_amount)}}</p>
                 <p class="note">After confirmation, your cart will be cleared.</p>
             </aside>
