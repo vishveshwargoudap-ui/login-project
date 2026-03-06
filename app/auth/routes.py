@@ -193,7 +193,7 @@ def profile():
 
     if request.method == 'POST':
         user.phone = (request.form.get('phone') or '').strip()
-        user.city = (request.form.get('city') or '').strip()
+        user.village = (request.form.get('village') or '').strip()
         user.address = (request.form.get('address') or '').strip()
         user.pincode = (request.form.get('pincode') or '').strip()
         db.session.commit()
