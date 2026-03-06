@@ -32,7 +32,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        existing_user=User.query_by(email=email).first()
+        existing_user=User.query.filter_by(email=email).first()
         if existing_user:
             return"Email already registered"
 
