@@ -14,6 +14,10 @@
       <h1>Create Account</h1>
       <p class="auth-subtitle">Register to start exploring products.</p>
 
+      {% if error%}
+      <p style="color:red;"{{error}}</p></p>
+      {% endif %}
+
       <form action="/register" method="POST" class="auth-form">
         <div class="field">
           <label for="name">Name</label>
