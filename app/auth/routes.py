@@ -32,6 +32,10 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
+        existing_user=User.query_by(email=email).first()
+        if existing_user:
+            return"Email already registered"
+
         new_user = User(name=name, email=email, password=password, role='buyer')
         db.session.add(new_user)
         db.session.commit()
