@@ -9,9 +9,9 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     phone =db.Column(db.String(20))
     role=db.Column(db.String(50), nullable=False, default='buyer') 
-    village=db.column(db.string(50),nullable=True,)
-    address=db.column(db.string(50),nullable=True)
-    pincode=db.column(db.string(50),nullable=True)
+    village=db.Column(db.String(50),nullable=True,)
+    address=db.Column(db.String(50),nullable=True)
+    pincode=db.Column(db.String(50),nullable=True)
       
 
     def __init__(self, name, email, password,role='buyer'):
