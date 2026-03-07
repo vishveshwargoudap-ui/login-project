@@ -565,7 +565,9 @@ def test_email():
     
 def send_async_email(app,msg):
     with app.app_context():
+        print("sending email...")
         mail.send(msg)
+        print("email sent!")
 
 def send_email(msg):
     app=current_app._get_current_object()
