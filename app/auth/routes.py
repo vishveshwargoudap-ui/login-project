@@ -550,7 +550,16 @@ def remove_payment(order_id):
 
 @auth.route("/test-email")
 def test_email():
-    send_order_email(User.query.first(),"upi")
-    return "Email test sent"
+    try:
+        msg = Message(
+            subject="test Email",
+    recipients=[current_app.config.get("MAIL_USERNAME")]
+        )
+        msg.body = "This is a test email from Flask."
 
+        mail.send(msg)
 
+        return "Email sent successfully"
+    except Exception as e:
+        return f"Email failed:{str(e)}"
+       
