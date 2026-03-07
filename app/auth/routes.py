@@ -548,4 +548,9 @@ def remove_payment(order_id):
 
     return redirect(url_for('auth.seller_payments'))
 
+@auth.route("/test-email")
+def test_email():
+    send_order_email(User.query.first(),"upi")
+    return "Email test sent"
+
 
