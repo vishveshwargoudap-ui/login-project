@@ -302,6 +302,8 @@ def place_order():
             oi.order_id = order.id
             db.session.add(oi)
 
+            db.session.commit()
+
        
         # ---- Send Email ----
         def send_order_email(user, payment_mode_raw):
@@ -326,8 +328,6 @@ Check seller dashboard for details.
 
             except Exception as e:
                 print("EMAIL FAILED:", e)
-
-                db.session.commit()
 
                 Thread(target=send_order_email,args=(user,payment_mode_raw)).start()
         
