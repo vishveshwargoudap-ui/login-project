@@ -16,10 +16,10 @@ def create_app():
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "default_secret_key")
     app.config["SESSION_COOKIE_SECURE"]=True
     app.config["SESSION_COOKIE_SAMESITE"]="Lax"
-    app.config['MAIL_SERVER']='smpt.gmail.com'
+    app.config['MAIL_SERVER']='smtp.gmail.com'
     app.config['MAIL_PORT']=587
     app.config['MAIL_USE_TLS']=True
-    app.config['MAIL_USERNAME']='vishveshwargoudap@gmail.com'
+    app.config['MAIL_USERNAME']=os.environ.get("MAIL_USERNAME")
     app.config['MAIL_PASSWORD']=os.environ.get("MAIL_PASSWORD")
     mail = Mail(app)
     mail.init_app(app)
