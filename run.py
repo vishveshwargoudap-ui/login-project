@@ -1,5 +1,6 @@
 import os
 from app import create_app,db
+from flask_mail import Mail,Message
 
 app = create_app()
 

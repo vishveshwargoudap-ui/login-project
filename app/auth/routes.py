@@ -1,13 +1,14 @@
-from flask import render_template, request, redirect, session, url_for, jsonify,flash
+from flask import render_template, request, redirect, session, url_for, jsonify,flash,current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
 from app.models import User,Product,Order,OrderItem
-from app.extensions import db
+from app.extensions import db,mail
 from .decorators import login_required
 from.import auth
 from cloudinary.uploader import upload
 from app.cloudinary_config import *
+from flask_mail import Message
 
 def can_manage_products(user):
     if not user:
@@ -300,6 +301,23 @@ def place_order():
             db.session.add(oi)
 
         db.session.commit()
+
+        msg = Message(
+            subject="New order Received",
+            sender=current_app.config['MAIL_USERNAME'],
+            recipients=["vishveshwargoudap@gmail.com"]
+        )
+
+        msg.body =  f"""
+        New Order Received
+
+        customer:{user.email}
+        payment Mode:{payment_mode_raw}
+        phone number:{user.phone}
+        check your seller dashboard for details.
+        """
+        mail.send(msg)
+        
 
         # ---- Clear Cart ----
         session['cart'] = []
