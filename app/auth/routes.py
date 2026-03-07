@@ -301,13 +301,13 @@ def place_order():
             db.session.add(oi)
 
         db.session.commit()
-
+    
         msg = Message(
             subject="New order Received",
             sender=current_app.config['MAIL_USERNAME'],
-            recipients=["vishveshwargoudap@gmail.com"]
+            recipients=[current_app.config['MAIL_USERNAME']]
         )
-
+        
         msg.body =  f"""
         New Order Received
 
