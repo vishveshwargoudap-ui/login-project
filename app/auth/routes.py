@@ -558,7 +558,7 @@ def test_email():
         )
         msg.body = "This is a test email from Flask."
 
-        send_email(msg)
+        mail.send(msg)
         return "Email queued successfully"
     except Exception as e:
         return f"Email failed:{str(e)}"
