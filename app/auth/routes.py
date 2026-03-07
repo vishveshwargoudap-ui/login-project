@@ -9,6 +9,7 @@ from.import auth
 from cloudinary.uploader import upload
 from app.cloudinary_config import *
 from flask_mail import Message
+import traceback
 
 def can_manage_products(user):
     if not user:
@@ -265,7 +266,7 @@ def place_order():
             product_id = item.get('id')
             quantity = int(item.get('qty', 1))  # make sure key is correct
 
-            product = Product.query.get(product_id)
+            product = Product.query.get(int(product_id))
             if not product:
                 continue
 
@@ -304,7 +305,6 @@ def place_order():
     
         msg = Message(
             subject="New order Received",
-            sender=current_app.config['MAIL_USERNAME'],
             recipients=[current_app.config['MAIL_USERNAME']]
         )
         
@@ -320,7 +320,7 @@ def place_order():
             mail.send(msg)
             print("email sent successfully")
         except Exception as e:
-            print("Email ERROR:",e)
+            traceback.print_exc()
 
         
         
