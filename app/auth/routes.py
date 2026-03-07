@@ -11,6 +11,7 @@ from app.cloudinary_config import *
 from flask_mail import Message
 import traceback
 from threading import Thread
+from app import mail
 
 def can_manage_products(user):
     if not user:
