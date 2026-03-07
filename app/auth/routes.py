@@ -12,6 +12,8 @@ from flask_mail import Message
 import traceback
 from threading import Thread
 from app import mail
+import smtplib
+from email.mime.text import MIMEText
 
 def can_manage_products(user):
     if not user:
@@ -552,25 +554,22 @@ def remove_payment(order_id):
 @auth.route("/test-email")
 def test_email():
     try:
-        msg = Message(
-            subject="test Email",
-    recipients=[current_app.config.get("MAIL_USERNAME")]
-        )
-        msg.body = "This is a test email from Flask."
+        sender = current_app.config.get("MAIL_USERNAME")
+        password = current_app.config.get("MAIL_PASSWORD")
 
-        mail.send(msg)
-        return "Email queued successfully"
+        msg = MIMEText("This is a test email from Flask.")
+        msg["Subject"] = "Test Email"
+        msg["From"] = sender
+        msg["To"] = sender
+
+        with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as server:
+            server.starttls()
+            server.login(sender, password)
+            server.sendmail(sender, [sender], msg.as_string())
+
+        return "Email sent successfully"
+
     except Exception as e:
-        return f"Email failed:{str(e)}"
-    
-def send_async_email(app,msg):
-    with app.app_context():
-        print("sending email...")
-        mail.send(msg)
+        import traceback
         traceback.print_exc()
-        print("email sent!")
-
-def send_email(msg):
-    app=current_app._get_current_object()
-    Thread(target=send_async_email,args=(app,msg)).start()
-       
+        return f"Email failed: {str(e)}"
