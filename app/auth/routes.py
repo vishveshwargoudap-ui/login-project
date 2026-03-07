@@ -316,7 +316,13 @@ def place_order():
         phone number:{user.phone}
         check your seller dashboard for details.
         """
-        mail.send(msg)
+        try:
+            mail.send(msg)
+            print("email sent successfully")
+        except Exception as e:
+            print("Email ERROR:",e)
+
+        
         
 
         # ---- Clear Cart ----
