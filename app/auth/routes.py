@@ -387,7 +387,7 @@ def payment(order_id):
         if order.user_id != user.id:
             return redirect(url_for('auth.dashboard'))
 
-        return jsonify({'redirect_url':url_for('auth.payment',order_id=order.id)})
+        return render_template('payment.html',order=order,user=user)
 #buyer route for order details
 @auth.route('/order/<int:order_id>')
 @login_required
