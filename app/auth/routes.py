@@ -558,9 +558,16 @@ def test_email():
         )
         msg.body = "This is a test email from Flask."
 
-        mail.send(msg)
-
-        return "Email sent successfully"
+        send_email(msg)
+        return "Email queued successfully"
     except Exception as e:
         return f"Email failed:{str(e)}"
+    
+def send_async_email(app,msg):
+    with app.app_context():
+        mail.send(msg)
+
+def send_email(msg):
+    app=current_app._get_current_object()
+    Thread(target=send_async_email,args=(app,msg)).start()
        
