@@ -221,7 +221,29 @@ def remove_from_cart():
 
     return redirect(url_for('auth.cart'))
 
+def send_order_email(user, payment_mode_raw):
+            try:
+                msg = Message(
+                    subject="New Order Received",
 
+        recipients=[current_app.config.get("MAIL_USERNAME")]
+                )
+
+                msg.body = f"""
+New Order Received
+
+Customer: {user.email}
+Payment Mode: {payment_mode_raw}
+Phone Number: {user.phone}
+
+Check seller dashboard for details.
+"""
+
+                mail.send(msg)
+                print("Email sent successfully")
+
+            except Exception as e:
+                print("EMAIL FAILED:", e)
 #buyer route for placing order
 @auth.route('/place-order', methods=['POST'])
 @login_required
@@ -303,33 +325,8 @@ def place_order():
             db.session.add(oi)
 
             db.session.commit()
-
-       
-        # ---- Send Email ----
-        def send_order_email(user, payment_mode_raw):
-            try:
-                msg = Message(
-                    subject="New Order Received",
-                    recipients=[current_app.config.get("MAIL_USERNAME")]
-                )
-
-                msg.body = f"""
-New Order Received
-
-Customer: {user.email}
-Payment Mode: {payment_mode_raw}
-Phone Number: {user.phone}
-
-Check seller dashboard for details.
-"""
-
-                mail.send(msg)
-                print("Email sent successfully")
-
-            except Exception as e:
-                print("EMAIL FAILED:", e)
-
-                Thread(target=send_order_email,args=(user,payment_mode_raw)).start()
+            
+            send_order_email(user,payment_mode_raw)
         
         # ---- Clear Cart ----
         session['cart'] = []
