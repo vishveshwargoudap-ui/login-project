@@ -567,6 +567,7 @@ def send_async_email(app,msg):
     with app.app_context():
         print("sending email...")
         mail.send(msg)
+        traceback.print_exc()
         print("email sent!")
 
 def send_email(msg):
