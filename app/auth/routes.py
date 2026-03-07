@@ -10,6 +10,7 @@ from cloudinary.uploader import upload
 from app.cloudinary_config import *
 from flask_mail import Message
 import traceback
+from threading import Thread
 
 def can_manage_products(user):
     if not user:
@@ -301,30 +302,35 @@ def place_order():
             oi.order_id = order.id
             db.session.add(oi)
 
-        db.session.commit()
-    
-        msg = Message(
-            subject="New order Received",
-            recipients=[current_app.config['MAIL_USERNAME']]
-        )
-        
-        msg.body =  f"""
-        New Order Received
+       
+        # ---- Send Email ----
+        def send_order_email(user, payment_mode_raw):
+            try:
+                msg = Message(
+                    subject="New Order Received",
+                    recipients=[current_app.config.get("MAIL_USERNAME")]
+                )
 
-        customer:{user.email}
-        payment Mode:{payment_mode_raw}
-        phone number:{user.phone}
-        check your seller dashboard for details.
-        """
-        try:
-            mail.send(msg)
-            print("email sent successfully")
-        except Exception as e:
-            traceback.print_exc()
+                msg.body = f"""
+New Order Received
 
-        
-        
+Customer: {user.email}
+Payment Mode: {payment_mode_raw}
+Phone Number: {user.phone}
 
+Check seller dashboard for details.
+"""
+
+                mail.send(msg)
+                print("Email sent successfully")
+
+            except Exception as e:
+                print("EMAIL FAILED:", e)
+
+                db.session.commit()
+
+                Thread(target=send_order_email,args=(user,payment_mode_raw)).start()
+        
         # ---- Clear Cart ----
         session['cart'] = []
         session.modified = True
@@ -358,6 +364,7 @@ def confirm_payment(order_id):
     order.transaction_id = transaction_id if method == "upi" else None
 
     db.session.commit()
+
 
     flash("Payment details updated successfully.", "success")
     return redirect(url_for('auth.order_details', order_id=order.id))
