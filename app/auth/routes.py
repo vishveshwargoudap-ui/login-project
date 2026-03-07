@@ -381,7 +381,9 @@ def payment(order_id):
         if not user:
             return redirect(url_for('auth.login'))
 
-        order = Order.query.get_or_404(order_id)
+        order = Order.query.get(order_id)
+        if not order:
+            return redirect(url_for('auth.dashboard'))
         if order.user_id != user.id:
             return redirect(url_for('auth.dashboard'))
 
