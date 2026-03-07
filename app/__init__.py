@@ -2,12 +2,9 @@ from flask import Flask
 from app.extensions import db
 from flask_mail import Mail
 import os
-import smtplib
 
 
 mail = Mail()
-
-smtplib.SMTP.timeout=10
   # Initialize the Flask application and configure it
 def create_app():
     app = Flask(__name__)
