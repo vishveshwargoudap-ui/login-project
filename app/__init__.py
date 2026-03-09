@@ -20,7 +20,7 @@ def create_app():
     app.config["SESSION_COOKIE_SECURE"]=True
     app.config["SESSION_COOKIE_SAMESITE"]="Lax"
     app.config['MAIL_SERVER']='smtp-relay.brevo.com'
-    app.config['MAIL_PORT']=587
+    app.config['MAIL_PORT']=2525
     app.config['MAIL_USE_TLS']=True
     app.config['MAIL_USE_SSL']=False
     app.config['MAIL_TIMEOUT']=5
