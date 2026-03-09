@@ -563,7 +563,9 @@ def test_email():
         msg["To"] = sender
 
         with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as server:
+            server.ehlo()
             server.starttls()
+            server.ehlo()
             server.login(sender, password)
             server.sendmail(sender, [sender], msg.as_string())
 
