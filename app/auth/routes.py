@@ -562,7 +562,7 @@ def test_email():
         msg["From"] = sender
         msg["To"] = sender
 
-        with smtplib.SMTP("smtp-relay.brevo.com", 2525, timeout=10) as server:
+        with smtplib.SMTP("smtp-relay.brevo.com", 587, timeout=10) as server:
             server.ehlo()
             server.starttls()
             server.ehlo()
