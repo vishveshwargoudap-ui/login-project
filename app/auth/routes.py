@@ -557,6 +557,10 @@ def test_email():
         sender = current_app.config.get("MAIL_USERNAME")
         password = current_app.config.get("MAIL_PASSWORD")
 
+        #DEBUG TEST
+        print("MAIL_USERNAME")
+        print("MAIL_PASSWORD")
+
         msg = MIMEText("This is a test email from Flask.")
         msg["Subject"] = "Test Email"
         msg["From"] = sender
