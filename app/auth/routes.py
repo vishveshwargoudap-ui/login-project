@@ -1,19 +1,15 @@
-from flask import render_template, request, redirect, session, url_for, jsonify,flash,current_app
+from flask import render_template, request, redirect, session, url_for, jsonify,flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
 from app.models import User,Product,Order,OrderItem
-from app.extensions import db,mail
+from app.extensions import db
 from .decorators import login_required
 from.import auth
 from cloudinary.uploader import upload
 from app.cloudinary_config import *
-from flask_mail import Message
 import traceback
 from threading import Thread
-from app import mail
-import smtplib
-from email.mime.text import MIMEText
 
 def can_manage_products(user):
     if not user:
@@ -223,30 +219,6 @@ def remove_from_cart():
     session.modified = True
 
     return redirect(url_for('auth.cart'))
-
-def send_order_email(user, payment_mode_raw):
-            try:
-                msg = Message(
-                    subject="New Order Received",
-
-        recipients=[current_app.config.get("MAIL_USERNAME")]
-                )
-
-                msg.body = f"""
-New Order Received
-
-Customer: {user.email}
-Payment Mode: {payment_mode_raw}
-Phone Number: {user.phone}
-
-Check seller dashboard for details.
-"""
-
-                mail.send(msg)
-                print("Email sent successfully")
-
-            except Exception as e:
-                print("EMAIL FAILED:", e)
 #buyer route for placing order
 @auth.route('/place-order', methods=['POST'])
 @login_required
@@ -328,8 +300,6 @@ def place_order():
             db.session.add(oi)
 
             db.session.commit()
-            
-            send_order_email(user,payment_mode_raw)
         
         # ---- Clear Cart ----
         session['cart'] = []
@@ -551,31 +521,3 @@ def remove_payment(order_id):
 
     return redirect(url_for('auth.seller_payments'))
 
-@auth.route("/test-email")
-def test_email():
-    try:
-        sender = current_app.config.get("MAIL_USERNAME")
-        password = current_app.config.get("MAIL_PASSWORD")
-
-        #DEBUG TEST
-        print("MAIL_USERNAME")
-        print("MAIL_PASSWORD")
-
-        msg = MIMEText("This is a test email from Flask.")
-        msg["Subject"] = "Test Email"
-        msg["From"] = sender
-        msg["To"] = sender
-
-        with smtplib.SMTP("smtp-relay.brevo.com", 2525, timeout=20) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            server.login(sender, password)
-            server.sendmail(sender, [sender], msg.as_string())
-
-        return "Email sent successfully"
-
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return f"Email failed: {str(e)}"
